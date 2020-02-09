@@ -9,7 +9,7 @@ public class MovePlayer : MonoBehaviour
     private float _maxJump = 1060,
         _speed, _speedstandart = 20, _speedSitDown = 10, NormalGravityScale = 7, _speedRun = 1100,
         _timeRun = 0;
-    bool _JumpBool = false, _LeftBool = false, _RightBool = false, _DownBool = false, _StopBlock = false;
+    /*[HideInInspector]*/ public bool _JumpBool = false, _LeftBool = false, _RightBool = false, _DownBool = false, _StopBlock = false, MoveActive = false;
     public bool _RightSide = false, _LeftSide = false, _DownSide = false, _RightBlc = false, _LeftBlc = false, _Runner = false, _Vector = false; [HideInInspector]
     void Start()
     {
@@ -19,6 +19,7 @@ public class MovePlayer : MonoBehaviour
     }
     void FixedUpdate()
     {
+        MoveActive = checkMove();
         _posPlayer = _GOPlayer.transform.position;
         if (_JumpBool)
         {
@@ -98,6 +99,11 @@ public class MovePlayer : MonoBehaviour
             }
         }
 
+    }
+    private bool checkMove()
+    {
+        if (_LeftBool || _RightBool) return true;
+        else return false;
     }
     public void Jump()
     {
