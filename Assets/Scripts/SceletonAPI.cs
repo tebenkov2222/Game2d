@@ -5,27 +5,27 @@ using UnityEngine;
 public class SceletonAPI : MonoBehaviour
 {
     #region public
-    public float AtackRadius = 15, DamageRadius = 1f, timeState = 2, speedGo = 2, timePLayerSearch = 15, timeLastVisiblePlayer = -15, Health = 5f;
+    public float Health = 5, AtackRadius = 15, timeState = 2, speedGo = 2, timePLayerSearch = 15, timeLastVisiblePlayer = -15;
     public GameObject Player, eyeRaycast, BackeyeRaycast, FB, B, FW, HITCOL;
-    public Animator anim;
     [HideInInspector] public bool FBbool = false, Bbool = false, FWbool = false;
     #endregion
     #region private
-    private Vector3 LastPositionVisiblePlayer = new Vector3();
+    private Animator anim;
     private float timefromState = 0;
     private Rigidbody2D Rb;
-    private bool Atack_Ready = false, playerFinded = false, State = false, Run = false, Atack = false, Walk = false, rightMove = true;
+    private bool Atack = false, Run = false, Atack_Ready = false, playerFinded = false, State = false, rightMove = true;
     #endregion
-
-    #region Main
+    // Start is called before the first frame update
     void Start()
     {
-        anim = this.gameObject.GetComponent<Animator>();
+        anim = this.GetComponent<Animator>();
         Rb = GetComponent<Rigidbody2D>();
         Player = GameObject.Find("Player");
         GetBoolFromEmpty();
         GetPlayerInAtackCircle();
     }
+
+    // Update is called once per frame
     void Update()
     {
         if (!Death())
@@ -33,16 +33,18 @@ public class SceletonAPI : MonoBehaviour
             if (Atack_Ready) checkEye();
             playerFinded = TimeActiveSearch();
             if (!playerFinded) IdleState();
-            /*else
-            {
-                if (Raycast(eyeRaycast, true))
-                {
-                }
-                else GoToLastPOint();
-            }*/
             GetPlayerInAtackCircle();
         }
-        else Destroy(this.gameObject);
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+    #region Main
+    private bool Death()
+    {
+        if (Health > 0) return false;
+        return true; ;
     }
     #endregion
     #region SearchPlayer 
@@ -71,13 +73,8 @@ public class SceletonAPI : MonoBehaviour
             Atack_Ready = false;
         }
     }
-    private bool Death()
-    {
-        if (Health > 0) return false;
-        return true; ;
-    }
     /// <summary>
-    /// проверяет на видимость игрока в зоне На входе ГО с которого происходит проверка и булева на обнуление времени последнего обнаружения игрока
+    /// проверяет на видимость игрока в зоне На входе ГО с которого происходит проверка
     /// </summary>
     private bool Raycast(GameObject Start, bool timeRes)
     {
@@ -85,7 +82,6 @@ public class SceletonAPI : MonoBehaviour
         Debug.DrawRay(Start.transform.position, (Player.transform.position - Start.transform.position), Color.red);
         if (hit.collider.gameObject.tag == "Player")
         {
-            LastPositionVisiblePlayer = hit.collider.gameObject.transform.position;
             if (timeRes) timeLastVisiblePlayer = Time.timeSinceLevelLoad;
             return true;
         }
@@ -112,42 +108,13 @@ public class SceletonAPI : MonoBehaviour
         {
             if (!Player.GetComponent<MovePlayer>()._DownBool && Player.GetComponent<MovePlayer>().MoveActive)
             {
-                rightMove = !rightMove;
                 transform.Rotate(new Vector3(0, 180, 0));
             }
         }
     }
     #endregion
     #region AtackPlayer
-    private void GoToPlayer()
-    {
-        /*GetBoolFromEmpty();
-        if (FBbool && !FWbool)
-        {
-            anim.SetBool("Walk", true);
-            GoForward();
-            State = false;
-        }
-        else
-        {
-            anim.SetBool("Walk", false);
-            if (!State)
-            {
-                timefromState = Time.realtimeSinceStartup;
-                State = true;
-            }
-            if (Time.realtimeSinceStartup - timefromState > timeState && State)
-            {
-                rightMove = !rightMove;
-                State = false;
-                transform.Rotate(new Vector3(0, 180, 0));
-            }
-        }*/
-    }
-    void GoToLastPOint()
-    {
 
-    }
     #endregion
     #region State
     void SetAnim(bool Runb, bool Walkb, bool Atackb, bool States)
@@ -165,43 +132,21 @@ public class SceletonAPI : MonoBehaviour
         GetBoolFromEmpty();
         if (FBbool && !FWbool)
         {
-            SetAnim(false, true, false, false);
-            GoForward();
-        }
-        else
-        {
-            anim.SetBool("Walk", false);
-            if (!State)
-            {
-                timefromState = Time.realtimeSinceStartup;
-                State = true;
-            }
-            if (Time.realtimeSinceStartup - timefromState > timeState && State)
-            {
-                rightMove = !rightMove;
-                State = false;
-                transform.Rotate(new Vector3(0, 180, 0));
-            }
-        }
-
-        GetBoolFromEmpty();
-        if (FBbool && !FWbool && Run)
-        {
-            SetAnim(false, true, false, false);
             GoForward();
             State = false;
         }
         else
         {
-            anim.SetBool("Walk", false);
-            if (!Atack)
+            Rb.velocity = new Vector2(0, Rb.velocity.y);    
+            if (!State)
             {
-                State = true;
+                SetAnim(false, false, false, true);
+                timefromState = Time.realtimeSinceStartup;
             }
             if (Time.realtimeSinceStartup - timefromState > timeState && State)
             {
+                SetAnim(false, true, false, false);
                 rightMove = !rightMove;
-                State = false;
                 transform.Rotate(new Vector3(0, 180, 0));
             }
         }
@@ -213,23 +158,5 @@ public class SceletonAPI : MonoBehaviour
     }
     #endregion
     #endregion
-    #region Переменные
-    /// <summary>
-    /// расстояние до плеера
-    /// </summary>
-    float DistanceToPlayer(GameObject Start)
-    {
-        return Vector3.Distance(Start.transform.position, Player.transform.position);
-    }
-    /// <summary>
-    /// если расстояние до плеера больше радиуса дамага, то Т
-    /// вход радиус
-    /// </summary>
-    /// <returns></returns>
-    bool CheckDistanceToPlayer(float radius)
-    {
-        if (DistanceToPlayer(this.gameObject) > radius) return true;
-        return false;
-    }
-    #endregion
+
 }
