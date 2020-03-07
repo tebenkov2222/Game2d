@@ -70,6 +70,8 @@ public class MovePlayer : MonoBehaviour
             movel = true;
             _Vector = true;
             _GOPlayer.GetComponent<SpriteRenderer>().flipX = true;
+            this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.transform.localPosition = new Vector2(-2, -0.5f);
+            this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.GetComponent<SpriteRenderer>().flipX = true;
             //_GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector3(-_speed, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y, 0);
             _GOPlayer.transform.position += new Vector3(-0.01f * _speed, 0, 0);
             rightMove = false;
@@ -79,6 +81,8 @@ public class MovePlayer : MonoBehaviour
             movel = true;
             _Vector = false;
             _GOPlayer.GetComponent<SpriteRenderer>().flipX = false;
+            this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.transform.localPosition = new Vector2(2, -0.5f);
+            this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.GetComponent<SpriteRenderer>().flipX = false;
             //_GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector3(_speed, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y, 0);
             _GOPlayer.transform.position += new Vector3(0.01f * _speed, 0, 0);
             rightMove = true;
@@ -119,6 +123,7 @@ public class MovePlayer : MonoBehaviour
         }
         if (_AtackBool)
         {
+            this.gameObject.GetComponentInChildren<AtackAnimation>().Atack();
             _AtackBool = false;
             List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapCircleAll(this.gameObject.transform.position, radiusAtack));
             for(int i = 0; i < ColAttack.Count; ++i)
