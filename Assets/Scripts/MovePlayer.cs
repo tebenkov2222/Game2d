@@ -6,7 +6,7 @@ public class MovePlayer : MonoBehaviour
 {
     public GameObject _GOPlayer;
     public Vector3 _posPlayer;
-    public float timeLoad = 2, timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10;
+    public float timeLoad = 2, timeRunner = 0.2f,  timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2;
     private float _maxJump = 1060,
         _speed, NormalGravityScale = 7, _speedRun = 1100,
         _timeRun = 0, procent = 1000;
@@ -104,35 +104,38 @@ public class MovePlayer : MonoBehaviour
         }
         if (_Runner)
         {
+            this.gameObject.GetComponent<TrailRenderer>().enabled = true;
             _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = 0;
             _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            AtackVoid();
             if (!_Vector)
             {
-                _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(1f,0) * _speedRun);
+                _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(1f * Force,0) * _speedRun);
             }
             else
             {
-                _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1f, 0) * _speedRun);
+                _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1f * Force, 0) * _speedRun);
             }
-            if (Time.time - _timeRun > 0.2f)
+            if (Time.time - _timeRun > timeRunner)
             {
+                
                 _Runner = false;
                 _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+                _GOPlayer.GetComponent<Rigidbody2D>().isKinematic = true;
+                _GOPlayer.GetComponent<Rigidbody2D>().isKinematic = false;
                 _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = NormalGravityScale;
+            }
+        }
+        if (this.gameObject.GetComponent<TrailRenderer>().enabled)
+        {
+            if (Time.time - _timeRun > timeRunner+0.2f)
+            {
+                this.gameObject.GetComponent<TrailRenderer>().enabled = false;
             }
         }
         if (_AtackBool)
         {
-            this.gameObject.GetComponentInChildren<AtackAnimation>().Atack();
-            _AtackBool = false;
-            List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapCircleAll(this.gameObject.transform.position, radiusAtack));
-            for(int i = 0; i < ColAttack.Count; ++i)
-            {
-                if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
-                {
-                    ColAttack[i].gameObject.GetComponent<SceletonAPI>().Health -= Damage;
-                }
-            }
+            AtackVoid();
         }
 
     }
@@ -174,7 +177,19 @@ public class MovePlayer : MonoBehaviour
         _DownBool = !_DownBool;
     }
     #endregion
-
+    private void AtackVoid()
+    {
+        this.gameObject.GetComponentInChildren<AtackAnimation>().Atack();
+        _AtackBool = false;
+        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(this.GetComponentInChildren<AtackAnimation>().gameObject.transform.position, new Vector2(0.1f, 0.2f), 0));
+        for (int i = 0; i < ColAttack.Count; ++i)
+        {
+            if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
+            {
+                ColAttack[i].gameObject.GetComponent<SceletonAPI>().Health -= Damage;
+            }
+        }
+    }
     public void LoadRun()
     {
         if (procent != 1000)
