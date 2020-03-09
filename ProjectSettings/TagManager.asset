@@ -22,7 +22,7 @@ TagManager:
   - Player
   - Mobs
   - MobsActive
-  - Light
+  - 
   - 
   - 
   - 
@@ -44,4 +44,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: NotLightRendering
+    uniqueID: 1225596703
     locked: 0
