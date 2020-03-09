@@ -8,6 +8,7 @@ TagManager:
   - Vall
   - StopBlock
   - Level
+  - Mobs
   layers:
   - Default
   - TransparentFX

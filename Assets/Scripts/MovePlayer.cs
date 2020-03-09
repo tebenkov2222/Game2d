@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MovePlayer : MonoBehaviour
 {
     public GameObject _GOPlayer;
-    public Vector3 _posPlayer;
-    public float timeLoad = 2, timeRunner = 0.2f,  timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2;
+    public Vector2 _posPlayer, AtackCol = new Vector2(0.5f, 1f);
+    public float Health = 5, timeLoad = 2, timeRunner = 0.2f,  timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2;
     private float _maxJump = 1060,
         _speed, NormalGravityScale = 7, _speedRun = 1100,
         _timeRun = 0, procent = 1000;
@@ -24,14 +25,17 @@ public class MovePlayer : MonoBehaviour
         LoadRun();
         MoveActive = checkMove();
         _posPlayer = _GOPlayer.transform.position;
+        //если нажат прыжок
         if (_JumpBool)
         {
+            // если снизу есть спрайт
             if (_DownSide)
             {
                 _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * _maxJump);
             }
             else
             {
+                // если справа или слева есть waypoint block 
                 if (_RightBlc || _LeftBlc)
                 {
                     _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = 0;
@@ -42,6 +46,7 @@ public class MovePlayer : MonoBehaviour
                 {
                     _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = NormalGravityScale;
                 }
+                // если справа блок и нажата левая кнопка
                 if ((_RightSide || _StopBlock )&& _LeftBool)
                 {
                     movel = true;
@@ -50,6 +55,7 @@ public class MovePlayer : MonoBehaviour
                     _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(0.1f, 1f) * _maxJump);
                     rightMove = true;
                 }
+                // если слева блок и нажата правая кнопка 
                 if ((_LeftSide || _StopBlock) && _RightBool)
                 {
                     movel = true;
@@ -65,36 +71,42 @@ public class MovePlayer : MonoBehaviour
             _StopBlock = false;
             _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = NormalGravityScale;
         }
-        if (_LeftBool && !_LeftSide)
+        // если не бежит
+        if (!_Runner) 
         {
-            movel = true;
-            _Vector = true;
-            _GOPlayer.GetComponent<SpriteRenderer>().flipX = true;
-            this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.transform.localPosition = new Vector2(-2, -0.5f);
-            this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.GetComponent<SpriteRenderer>().flipX = true;
-            //_GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector3(-_speed, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y, 0);
-            _GOPlayer.transform.position += new Vector3(-0.01f * _speed, 0, 0);
-            rightMove = false;
+            // если нажата левая кнопка и слева свободно
+            if (_LeftBool && !_LeftSide)
+            {
+                movel = true;
+                _Vector = true;
+                _GOPlayer.GetComponent<SpriteRenderer>().flipX = true;
+                this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.transform.localPosition = new Vector2(-2, -0.5f);
+                this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                _GOPlayer.transform.position += new Vector3(-0.01f * _speed, 0, 0);
+                rightMove = false;
+            }
+            // если нажата правая кнопка и справа свободно
+            if (_RightBool && !_RightSide)
+            {
+                movel = true;
+                _Vector = false;
+                _GOPlayer.GetComponent<SpriteRenderer>().flipX = false;
+                this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.transform.localPosition = new Vector2(2, -0.5f);
+                this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                _GOPlayer.transform.position += new Vector3(0.01f * _speed, 0, 0);
+                rightMove = true;
+            }
         }
-        if (_RightBool && !_RightSide)
-        {
-            movel = true;
-            _Vector = false;
-            _GOPlayer.GetComponent<SpriteRenderer>().flipX = false;
-            this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.transform.localPosition = new Vector2(2, -0.5f);
-            this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.GetComponent<SpriteRenderer>().flipX = false;
-            //_GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector3(_speed, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y, 0);
-            _GOPlayer.transform.position += new Vector3(0.01f * _speed, 0, 0);
-            rightMove = true;
-        }
+        // если снизу спрайт
         if (_DownSide) movel = false;
+        // если плеер в воздухе и 
         if (!_DownSide && !_LeftBool && !_RightBool && !_RightSide && !_LeftSide && movel)
         {
             movel = false;
             if (rightMove) _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector3(_speed/ 4, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y, 0);
             else _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector3(-_speed / 4, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y, 0);
         }
-        if (_DownBool)
+        if (_DownBool) // если в присяди
         {
             _speed = _speedSitDown;
         }
@@ -102,21 +114,21 @@ public class MovePlayer : MonoBehaviour
         {
             _speed = _speedstandart;
         }
-        if (_Runner)
+        if (_Runner) // если бег
         {
             this.gameObject.GetComponent<TrailRenderer>().enabled = true;
             _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = 0;
             _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             AtackVoid();
-            if (!_Vector)
+            if (!_Vector) // вправо
             {
                 _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(1f * Force,0) * _speedRun);
             }
-            else
+            else // влево
             {
                 _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1f * Force, 0) * _speedRun);
             }
-            if (Time.time - _timeRun > timeRunner)
+            if (Time.time - _timeRun > timeRunner) // если прошло больше, чем время рывка
             {
                 
                 _Runner = false;
@@ -126,20 +138,24 @@ public class MovePlayer : MonoBehaviour
                 _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = NormalGravityScale;
             }
         }
-        if (this.gameObject.GetComponent<TrailRenderer>().enabled)
+        if (this.gameObject.GetComponent<TrailRenderer>().enabled) // если трейл включен
         {
-            if (Time.time - _timeRun > timeRunner+0.2f)
+            if (Time.time - _timeRun > timeRunner+0.2f) // если прошло больше, чем нажатие на кнопку и время трейла
             {
                 this.gameObject.GetComponent<TrailRenderer>().enabled = false;
             }
         }
-        if (_AtackBool)
+        if (_AtackBool) // если нажата кнопка атаковать
         {
             AtackVoid();
+            this.gameObject.GetComponentInChildren<AtackAnimation>().Atack();
         }
 
     }
-    
+    /// <summary>
+    /// провека на передвижение плеера
+    /// </summary>
+    /// <returns></returns>
     private bool checkMove()
     {
         if (_LeftBool || _RightBool) return true;
@@ -176,12 +192,16 @@ public class MovePlayer : MonoBehaviour
     {
         _DownBool = !_DownBool;
     }
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     #endregion
+    //атаковать
     private void AtackVoid()
     {
-        this.gameObject.GetComponentInChildren<AtackAnimation>().Atack();
         _AtackBool = false;
-        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(this.GetComponentInChildren<AtackAnimation>().gameObject.transform.position, new Vector2(0.1f, 0.2f), 0));
+        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(this.GetComponentInChildren<AtackAnimation>().gameObject.transform.position, AtackCol, 0));
         for (int i = 0; i < ColAttack.Count; ++i)
         {
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
@@ -190,6 +210,9 @@ public class MovePlayer : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// загрузка спрайта
+    /// </summary>
     public void LoadRun()
     {
         if (procent != 1000)
@@ -199,4 +222,5 @@ public class MovePlayer : MonoBehaviour
         }
         else this.gameObject.GetComponent<LoadSprite>().SetLoad(0);
     }
+    // перезагрузка левэла
 }
