@@ -5,18 +5,18 @@ using UnityEngine;
 public class SceletonAPI : MonoBehaviour
 {
     #region public
-    public float Health = 5, AtackRadius = 0.5f, SearchRadius = 15, timeState = 2, speedRun = 5, speedGo = 2, Damage = 1;
-    public GameObject Player, eyeRaycast, BackeyeRaycast, FB, B, FW, HITCOL, AtackRegion;
-    public bool Atack = false, Damagebool = false;
-    [HideInInspector] public bool FBbool = false, Bbool = false, FWbool = false;
+    [SerializeField]  private float Health = 5, AtackRadius = 1f, SearchRadius = 15, timeState = 2, speedRun = 4, speedWalk = 2, Damage = 1, heightFindPlayer = 6, heightState = 4;
+    [SerializeField]  private GameObject eyeRaycast, BackeyeRaycast, FwdBttmBoolGO, BttmBoolGO, FwdWallBoolGO, AtackRegion;
+    [SerializeField] LayerMask lmask;
+    [HideInInspector] public bool FBbool = false, Bbool = false, FWbool = false, Atack = false, Damagebool = false;
     #endregion
     #region private
+    private GameObject Player;
     private Animator anim;
     private float timefromState = 0, timePLayerSearch = 15, timeLastVisiblePlayer = -16, timePLayerAtack = 1, timeLastAtackPlayer = 0;
     private Rigidbody2D Rb;
     private bool  Run = false, Atack_Ready = false, playerFinded = false, State = false, rightMove = true;
     #endregion
-    // Start is called before the first frame update
     void Start()
     {
         anim = this.GetComponent<Animator>();
@@ -25,8 +25,6 @@ public class SceletonAPI : MonoBehaviour
         GetBoolFromEmpty();
         GetPlayerInAtackCircle();
     }
-
-    // Update is called once per frame
     void Update()
     {
         //если не умер
@@ -60,9 +58,9 @@ public class SceletonAPI : MonoBehaviour
                 }
             }
             else { IdleState(); }
-            
 
-            GetPlayerInAtackCircle(); 
+
+            GetPlayerInAtackCircle();
         }
         else
         {
@@ -70,6 +68,11 @@ public class SceletonAPI : MonoBehaviour
         }
     }
     #region Main
+    private  bool CanRunToPlayer()
+    {
+        if (Player.transform.position.y - this.transform.position.y < heightState) return false;
+        else return true;
+    }
     private bool Death()
     {
         if (Health > 0) return false;
@@ -82,9 +85,9 @@ public class SceletonAPI : MonoBehaviour
     /// </summary>
     private void GetBoolFromEmpty()
     {
-        FBbool = FB.GetComponent<EmptyCheck>().GetStateEmpty();
-        Bbool = B.GetComponent<EmptyCheck>().GetStateEmpty();
-        FWbool = FW.GetComponent<EmptyCheck>().GetStateEmpty();
+        FBbool = FwdBttmBoolGO.GetComponent<EmptyCheck>().GetStateEmpty();
+        Bbool = BttmBoolGO.GetComponent<EmptyCheck>().GetStateEmpty();
+        FWbool = FwdWallBoolGO.GetComponent<EmptyCheck>().GetStateEmpty();
     }
     /// <summary>
     /// ищет в сфере радиусом SearchRadius игрока 
@@ -107,7 +110,7 @@ public class SceletonAPI : MonoBehaviour
     /// </summary>
     private bool Raycast(GameObject Start, bool timeRes)
     {
-        RaycastHit2D hit = Physics2D.Raycast(Start.transform.position, (Player.transform.position - Start.transform.position));
+        RaycastHit2D hit = Physics2D.Raycast(Start.transform.position, (Player.transform.position - Start.transform.position), lmask);
         Debug.DrawRay(Start.transform.position, (Player.transform.position - Start.transform.position), Color.red);
         if (hit.collider.gameObject.tag == "Player")
         {
@@ -132,7 +135,7 @@ public class SceletonAPI : MonoBehaviour
     /// </summary>
     private void checkEye()
     {
-        playerFinded = Raycast(eyeRaycast, true);
+        playerFinded = Raycast(eyeRaycast, true) && (Player.transform.position.y - this.transform.position.y) < heightFindPlayer;
         if (Raycast(BackeyeRaycast, false))
         {
             if (!Player.GetComponent<MovePlayer>()._DownBool && Player.GetComponent<MovePlayer>().MoveActive)
@@ -157,20 +160,18 @@ public class SceletonAPI : MonoBehaviour
     #region RunsToPLayerState
     private bool GoToPlayer()
     {
-        if (Vector3.Distance(this.gameObject.transform.position, Player.transform.position) > AtackRadius && !Atack)
+        if (Vector3.Distance(eyeRaycast.gameObject.transform.position, Player.transform.position) > AtackRadius && !Atack)
         {
             GetBoolFromEmpty();
-            if (FBbool && !FWbool)
+            if (FBbool && !FWbool )
             {
-                Debug.Log("RUN");
                 SetAnim(true, false, false, false);
-                GoForward(speedRun);
+                if (Bbool) GoForward(speedRun);
             }
             else
             {
-                Rb.isKinematic = true;
-                Rb.isKinematic = false;
-                Rb.velocity = new Vector2(0, Rb.velocity.y);
+                SetAnim(false, false, false, true);
+                if (Bbool) Rb.velocity = new Vector2(0, Rb.velocity.y);
             }
             return true;
         }
@@ -197,7 +198,7 @@ public class SceletonAPI : MonoBehaviour
             {
                 if (ColAttack[i].gameObject.name == "Player")
                 {
-                    ColAttack[i].gameObject.GetComponent<MovePlayer>().Health -= Damage;
+                    ColAttack[i].gameObject.GetComponent<MovePlayer>().GetDamage(Damage);
                 }
             }
         }
@@ -209,12 +210,12 @@ public class SceletonAPI : MonoBehaviour
         GetBoolFromEmpty();
         if (FBbool && !FWbool)
         {
-            GoForward(speedGo);
+            if (Bbool) GoForward(speedWalk);
             State = false;
         }
         else
         {
-            Rb.velocity = new Vector2(0, Rb.velocity.y);    
+            if (Bbool) Rb.velocity = new Vector2(0, Rb.velocity.y);    
             if (!State)
             {
                 SetAnim(false, false, false, true);
@@ -230,10 +231,22 @@ public class SceletonAPI : MonoBehaviour
     }
     private void GoForward(float speed)
     {
+        Debug.Log(this.gameObject.name + " Walk");
         if (rightMove) Rb.velocity = new Vector2(1 * speed, Rb.velocity.y);
         else Rb.velocity = new Vector2(-1 * speed, Rb.velocity.y);
     }
     #endregion
     #endregion
+    public void GetDamage(float damage)
+    {
+        if (Random.Range(0, 50) == 1)
+        {
+            Health -= damage * 0.3f;
+        }
+        else
+        {
+            Health -= damage;
+        }
+    }
 
 }

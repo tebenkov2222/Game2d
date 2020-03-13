@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MovePlayer : MonoBehaviour
 {
+    public Text text;
     public GameObject _GOPlayer;
     public Vector2 _posPlayer, AtackCol = new Vector2(0.5f, 1f);
     public float Health = 5, timeLoad = 2, timeRunner = 0.2f,  timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2;
@@ -21,7 +23,8 @@ public class MovePlayer : MonoBehaviour
     }
     void FixedUpdate()
     {
-        
+        if (Health <=0 ) SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        setText();
         LoadRun();
         MoveActive = checkMove();
         _posPlayer = _GOPlayer.transform.position;
@@ -206,8 +209,23 @@ public class MovePlayer : MonoBehaviour
         {
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
             {
-                ColAttack[i].gameObject.GetComponent<SceletonAPI>().Health -= Damage;
+                ColAttack[i].gameObject.GetComponent<SceletonAPI>().GetDamage(Damage);
             }
+        }
+    }
+    private void setText()
+    {
+        text.text = Health.ToString();
+    }
+    public void GetDamage(float damage)
+    {
+        if (Random.Range(0,50) == 1)
+        {
+            Health -= damage * 0.3f;
+        }
+        else
+        {
+            Health -= damage;
         }
     }
     /// <summary>
