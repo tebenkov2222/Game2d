@@ -9,9 +9,8 @@ public class MovePlayer : MonoBehaviour
     public Text text;
     public GameObject _GOPlayer;
     public Vector2 _posPlayer, AtackCol = new Vector2(0.5f, 1f);
-    public float Health = 5, timeLoad = 2, timeRunner = 0.2f,  timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2;
-    private float _maxJump = 1060,
-        _speed, NormalGravityScale = 7, _speedRun = 1100,
+    public float Health = 5, timeLoad = 2, timeRunner = 0.2f,  timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2, _maxJump = 1060;
+    private float  _speed, NormalGravityScale = 7, _speedRun = 1100,
         _timeRun = 0, procent = 1000;
     [HideInInspector] public bool _JumpBool = false, _AtackBool = false, _LeftBool = false, _RightBool = false, _DownBool = false, _StopBlock = false, MoveActive = false, movel = false;
     public bool _RightSide = false, _LeftSide = false, _DownSide = false, _RightBlc = false, _LeftBlc = false, _Runner = false, _Vector = false, rightMove = true; [HideInInspector]
@@ -48,6 +47,10 @@ public class MovePlayer : MonoBehaviour
                 else
                 {
                     _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = NormalGravityScale;
+                }
+                if ((_LeftSide || _StopBlock) || (_RightSide || _StopBlock))
+                {
+                    _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y);
                 }
                 // если справа блок и нажата левая кнопка
                 if ((_RightSide || _StopBlock )&& _LeftBool)
@@ -122,7 +125,7 @@ public class MovePlayer : MonoBehaviour
             this.gameObject.GetComponent<TrailRenderer>().enabled = true;
             _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = 0;
             _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-            AtackVoid();
+            AtackVoid(this.gameObject, new Vector2(0.1f,0.1f));
             if (!_Vector) // вправо
             {
                 _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(1f * Force,0) * _speedRun);
@@ -150,11 +153,12 @@ public class MovePlayer : MonoBehaviour
         }
         if (_AtackBool) // если нажата кнопка атаковать
         {
-            AtackVoid();
+            AtackVoid(this.GetComponentInChildren<AtackAnimation>().gameObject, AtackCol);
             this.gameObject.GetComponentInChildren<AtackAnimation>().Atack();
         }
 
     }
+
     /// <summary>
     /// провека на передвижение плеера
     /// </summary>
@@ -201,10 +205,10 @@ public class MovePlayer : MonoBehaviour
     }
     #endregion
     //атаковать
-    private void AtackVoid()
+    private void AtackVoid(GameObject Center, Vector2 Scale )
     {
         _AtackBool = false;
-        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(this.GetComponentInChildren<AtackAnimation>().gameObject.transform.position, AtackCol, 0));
+        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(Center.transform.position, Scale , 0));
         for (int i = 0; i < ColAttack.Count; ++i)
         {
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
@@ -235,7 +239,7 @@ public class MovePlayer : MonoBehaviour
     {
         if (procent != 1000)
         {
-            procent += 1000 / (timeLoad * 50);
+            procent += 1000 / (timeLoad * 100);
             this.gameObject.GetComponent<LoadSprite>().SetLoad(procent);
         }
         else this.gameObject.GetComponent<LoadSprite>().SetLoad(0);

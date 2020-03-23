@@ -9,6 +9,7 @@ TagManager:
   - StopBlock
   - Level
   - Mobs
+  - Sceleton
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Player
   - Mobs
   - MobsActive
-  - 
+  - Navigation
   - 
   - 
   - 
