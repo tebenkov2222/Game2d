@@ -48,7 +48,7 @@ public class SceletonAPI : MonoBehaviour
                 {
                     if (Time.time - timeLastAtackPlayer > timePLayerAtack)
                     {
-                        this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, -9.8f);
+                        this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, this.gameObject.GetComponent<Rigidbody2D>().velocity.y);
                         this.GetComponent<Animator>().Play("SceletonAtack", 0);
                         timeLastAtackPlayer = Time.time;
                         SetAnim(false, false, true, false);

@@ -155,6 +155,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: scelet
       objectReference: {fileID: 0}
+    - target: {fileID: 4490835070376540334, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_UseAutoMass
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835070376540334, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_Mass
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835070376540334, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_LinearDrag
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835070376540334, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835070376540334, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_GravityScale
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4490835070376540335, guid: 2dbeeced0a9b23845b55a643492f9536,
         type: 3}
       propertyPath: m_LocalPosition.x

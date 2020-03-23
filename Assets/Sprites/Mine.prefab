@@ -206,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   radius: 3
-  power: 500
+  power: 400
   layerMask:
     serializedVersion: 2
     m_Bits: 7168
