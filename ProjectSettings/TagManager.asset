@@ -8,8 +8,10 @@ TagManager:
   - Vall
   - StopBlock
   - Level
-  - Mobs
   - Sceleton
+  - Strazh
+  - RemoveObj
+  - Mobs
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,7 @@ TagManager:
   - Mobs
   - MobsActive
   - Navigation
-  - 
+  - Teleport
   - 
   - 
   - 

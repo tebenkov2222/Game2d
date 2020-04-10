@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5698777166065635311}
   m_Layer: 11
   m_Name: Sceleton
-  m_TagString: Mobs
+  m_TagString: Sceleton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,6 +135,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5698777166065635311}
     m_Modifications:
+    - target: {fileID: 34722224960892994, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sceleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835068340161974, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sceleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835068499140242, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sceleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835069235475283, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sceleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835069595221213, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sceleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835070065342420, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sceleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490835070311627613, guid: 2dbeeced0a9b23845b55a643492f9536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sceleton
+      objectReference: {fileID: 0}
     - target: {fileID: 4490835070376540320, guid: 2dbeeced0a9b23845b55a643492f9536,
         type: 3}
       propertyPath: StateGO
@@ -148,7 +183,7 @@ PrefabInstance:
     - target: {fileID: 4490835070376540320, guid: 2dbeeced0a9b23845b55a643492f9536,
         type: 3}
       propertyPath: lmask.m_Bits
-      value: 2048
+      value: 9216
       objectReference: {fileID: 0}
     - target: {fileID: 4490835070376540330, guid: 2dbeeced0a9b23845b55a643492f9536,
         type: 3}
