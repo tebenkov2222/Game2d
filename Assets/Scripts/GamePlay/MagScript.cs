@@ -15,7 +15,7 @@ public class MagScript : MonoBehaviour
     private Animator anim;
     private float timefromState = 0, timePLayerSearch = 15, timeLastVisiblePlayer = -16, timePLayerAtack = 1, timeLastAtackPlayer = 0;
     private Rigidbody2D Rb;
-    private bool Run = false, Atack_Ready = false, playerFinded = false, State = false, rightMove = true;
+    private bool DeathBool = false, Run = false, Atack_Ready = false, playerFinded = false, State = false, rightMove = true;
     private Vector3 LastVisiblePositionPlayer;
     #endregion
     void Start()
@@ -43,6 +43,7 @@ public class MagScript : MonoBehaviour
                 if (!RightMove())
                 {
                     rightMove = !rightMove;
+                    Debug.Log("ROTATEMAG");
                     transform.Rotate(new Vector3(0, 180, 0));
                 }
                 if (!GoToPlayer())
@@ -64,12 +65,14 @@ public class MagScript : MonoBehaviour
         }
         else
         {
-            SetAnim(false, false, false, false);
-            anim.SetBool("Death", true);
-            for (int i = 0; i < 6; ++i) Destroy(transform.GetChild(i).gameObject);
-            Destroy(this.gameObject.GetComponent<PolygonCollider2D>());
-            Destroy(this);
-            Destroy(this.gameObject.GetComponent<Rigidbody2D>());
+            if (!DeathBool)
+            {
+                DeathBool = true;
+                SetAnim(false, false, false, false);
+                anim.SetBool("Death", true);
+                for (int i = 0; i < 6; ++i) Destroy(transform.GetChild(i).gameObject);
+                Destroy(this);
+            }
         }
     }
     #region Main
@@ -92,23 +95,26 @@ public class MagScript : MonoBehaviour
     {
         StateMobs.transform.position = StateGO.transform.position;
     }
-    public void PlayerFindOtherMobs()
+    public void PlayerFindOtherMobs(Vector2 PlayerPosition)
     {
+        LastVisiblePositionPlayer = PlayerPosition;
         timeLastVisiblePlayer = Time.timeSinceLevelLoad;
         playerFinded = true;
     }
+
     private void SetFindOtherMobs()
     {
         List<Collider2D> cols = new List<Collider2D>(Physics2D.OverlapCircleAll(this.gameObject.transform.position, MobsRadius));
         for (int i = 0; i < cols.Count; i++)
         {
-            if (cols[i].tag == "Sceleton") cols[i].gameObject.GetComponent<SceletonAPI>().PlayerFindOtherMobs();
+            if (cols[i].tag == "Strazh") if (cols[i].gameObject.GetComponent<MagScript>()) cols[i].gameObject.GetComponent<MagScript>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+            if (cols[i].tag == "Sceleton") if (cols[i].gameObject.GetComponent<SceletonAPI>()) cols[i].gameObject.GetComponent<SceletonAPI>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
         }
     }
     private bool RightMove()
     {
-        if (Vector3.Distance(BackeyeRaycast.transform.position, LastVisiblePositionPlayer) >
-            Vector3.Distance(eyeRaycast.transform.position, LastVisiblePositionPlayer)) return true;
+        if (Mathf.Abs(BackeyeRaycast.transform.position.x - LastVisiblePositionPlayer.x) >
+            Mathf.Abs(eyeRaycast.transform.position.x - LastVisiblePositionPlayer.x)) return true;
         else return false;
     }
     private bool Death()
@@ -149,7 +155,7 @@ public class MagScript : MonoBehaviour
     private bool Raycast(GameObject Start, bool timeRes)
     {
         RaycastHit2D hit = Physics2D.Raycast(Start.transform.position, (Player.transform.position - Start.transform.position), 40, lmask);
-        Debug.DrawRay(Start.transform.position, (hit.transform.position - Start.transform.position), Color.red);
+        //Debug.DrawRay(Start.transform.position, (hit.transform.position - Start.transform.position), Color.red);
         if (hit.collider.gameObject.tag == "Player")
         {
             LastVisiblePositionPlayer = hit.transform.position;
@@ -194,7 +200,7 @@ public class MagScript : MonoBehaviour
         }
         if (Raycast(BackeyeRaycast, false))
         {
-            if (!Player.GetComponent<MovePlayer>()._DownBool && Player.GetComponent<MovePlayer>().MoveActive)
+            if (!Player.GetComponent<PlayerController>()._DownBool && Player.GetComponent<PlayerController>().MoveActive)
             {
                 rightMove = !rightMove;
                 transform.Rotate(new Vector3(0, 180, 0));

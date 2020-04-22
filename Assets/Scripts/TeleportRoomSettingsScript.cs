@@ -27,7 +27,7 @@ public class TeleportRoomSettingsScript : MonoBehaviour
     {
         Player.transform.position = GameObject.Find("Start").gameObject.transform.position;
         Player.GetComponent<SpriteRenderer>().enabled = true;
-        Player.GetComponent<MovePlayer>().enabled = true;
+        Player.GetComponent<PlayerController>().ActivePlayer = true;
         Player.GetComponent<Rigidbody2D>().isKinematic = false;
 
     }

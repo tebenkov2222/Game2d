@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SceletonAPI : MonoBehaviour
@@ -15,7 +14,7 @@ public class SceletonAPI : MonoBehaviour
     private Animator anim;
     private float timefromState = 0, timePLayerSearch = 15, timeLastVisiblePlayer = -16, timePLayerAtack = 1, timeLastAtackPlayer = 0;
     private Rigidbody2D Rb;
-    private bool  Run = false, Atack_Ready = false, playerFinded = false, State = false, rightMove = true;
+    private bool  Run = false, Atack_Ready = false, playerFinded = false, State = false, rightMove = true, DeathBool = false;
     private Vector3 LastVisiblePositionPlayer;
     #endregion
     void Start()
@@ -69,18 +68,20 @@ public class SceletonAPI : MonoBehaviour
         }
         else
         {
-            SetAnim(false, false, false, false);
-            anim.SetBool("Death", true);
-            for(int i = 0; i< 6; ++i) Destroy(transform.GetChild(i).gameObject);
-            Destroy(this.gameObject.GetComponent<PolygonCollider2D>());
-            Destroy(this);
-            Destroy(this.gameObject.GetComponent<Rigidbody2D>());
+            if (!DeathBool)
+            {
+                DeathBool = true;
+                SetAnim(false, false, false, false);
+                anim.SetBool("Death", true);
+                for (int i = 0; i < 6; ++i) Destroy(transform.GetChild(i).gameObject);
+                Destroy(this);
+            }
         }
     }
     #region Main
     private void checkState()
     {
-        if (!Raycast(eyeRaycast, true) && playerFinded)
+        if (!Raycast(eyeRaycast, true, !BackEye()) && playerFinded)
         {
             if (StateMobs.GetComponent<StateActive>().LastState != "Que")
             {
@@ -97,8 +98,9 @@ public class SceletonAPI : MonoBehaviour
     {
         StateMobs.transform.position = StateGO.transform.position;
     }
-    public void PlayerFindOtherMobs()
+    public void PlayerFindOtherMobs(Vector2 PlayerPosition)
     {
+        LastVisiblePositionPlayer = PlayerPosition;
         timeLastVisiblePlayer = Time.timeSinceLevelLoad;
         playerFinded = true;
     }
@@ -107,7 +109,8 @@ public class SceletonAPI : MonoBehaviour
         List<Collider2D> cols = new List<Collider2D>(Physics2D.OverlapCircleAll(this.gameObject.transform.position, MobsRadius));
         for (int i = 0; i < cols.Count; i++)
         {
-            if (cols[i].tag == "Sceleton") cols[i].gameObject.GetComponent<SceletonAPI>().PlayerFindOtherMobs();
+            if (cols[i].tag == "Sceleton") if (cols[i].gameObject.GetComponent<SceletonAPI>()) cols[i].gameObject.GetComponent<SceletonAPI>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+            if (cols[i].tag == "Strazh") if(cols[i].gameObject.GetComponent<MagScript>()) cols[i].gameObject.GetComponent<MagScript>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
         }
     }
     private bool RightMove()
@@ -116,10 +119,11 @@ public class SceletonAPI : MonoBehaviour
             Vector3.Distance(eyeRaycast.transform.position, LastVisiblePositionPlayer)) return true;
         else return false;
     }
-    private  bool CanRunToPlayer()
+    private  bool BackEye()
     {
-        if (Raycast(eyeRaycast, true)) return false;
-        else return true;
+        if (Mathf.Abs(BackeyeRaycast.transform.position.x - Player.transform.position.x) <
+            Mathf.Abs(eyeRaycast.transform.position.x - Player.transform.position.x)) return true;
+        else return false;
     }
     private bool Death()
     {
@@ -156,11 +160,11 @@ public class SceletonAPI : MonoBehaviour
     /// <summary>
     /// проверяет на видимость игрока в зоне На входе ГО с которого происходит проверка
     /// </summary>
-    private bool Raycast(GameObject Start, bool timeRes)
+    private bool Raycast(GameObject Start, bool timeRes, bool Eye)
     {
         RaycastHit2D hit = Physics2D.Raycast(Start.transform.position, (Player.transform.position - Start.transform.position), 40, lmask);
         Debug.DrawRay(Start.transform.position, (hit.transform.position - Start.transform.position), Color.red);
-        if (hit.collider.gameObject.tag == "Player")
+        if (hit.collider.gameObject.tag == "Player" && Eye)
         {
             LastVisiblePositionPlayer = hit.transform.position;
             if (timeRes) timeLastVisiblePlayer = Time.timeSinceLevelLoad;
@@ -184,8 +188,9 @@ public class SceletonAPI : MonoBehaviour
     /// </summary>
     private void checkEye()
     {
-        if (Raycast(eyeRaycast, true) && (Player.transform.position.y - this.transform.position.y) < heightFindPlayer)
+        if (Raycast(eyeRaycast, true, !BackEye()) && (Player.transform.position.y - this.transform.position.y) < heightFindPlayer)
         {
+
             SetFindOtherMobs();
             playerFinded = true;
             if (StateMobs.GetComponent<StateActive>().LastState != "Exc")
@@ -202,10 +207,11 @@ public class SceletonAPI : MonoBehaviour
         {
             StateMobs.GetComponent<StateActive>().RenameLastState();
         }
-        if (Raycast(BackeyeRaycast, false))
+        if (Raycast(BackeyeRaycast, false,true) && BackEye())
         {
-            if (!Player.GetComponent<MovePlayer>()._DownBool && Player.GetComponent<MovePlayer>().MoveActive)
+            if (Player.GetComponent<PlayerController>().MoveActive)
             {
+                Debug.Log("FIND");
                 rightMove = !rightMove;
                 transform.Rotate(new Vector3(0, 180, 0));
             }
@@ -264,7 +270,7 @@ public class SceletonAPI : MonoBehaviour
             {
                 if (ColAttack[i].gameObject.name == "Player")
                 {
-                    ColAttack[i].gameObject.GetComponent<MovePlayer>().GetDamage(Damage);
+                    ColAttack[i].gameObject.GetComponent<PlayerController>().GetDamage(Damage);
                     ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(Player.transform.position.x - this.transform.position.x, 0.5f) * 100);
                 }
             }
@@ -299,7 +305,7 @@ public class SceletonAPI : MonoBehaviour
     private void GoForward(float speed)
     {
         StatePosition();
-        if (((Raycast(eyeRaycast, true) || this.transform.position.x != LastVisiblePositionPlayer.x) && playerFinded) || !playerFinded) { 
+        if (((Raycast(eyeRaycast, true, !BackEye()) || this.transform.position.x != LastVisiblePositionPlayer.x) && playerFinded) || !playerFinded) { 
             if (rightMove) Rb.velocity = new Vector2(1 * speed, Rb.velocity.y);
             else Rb.velocity = new Vector2(-1 * speed, Rb.velocity.y);
         }

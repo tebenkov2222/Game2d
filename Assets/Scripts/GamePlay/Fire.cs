@@ -13,7 +13,7 @@ public class Fire : MonoBehaviour
         {
             if (cols[i].gameObject.name == "Player")
             {
-                cols[i].gameObject.GetComponentInParent<MovePlayer>().GetDamage(3f);
+                cols[i].gameObject.GetComponentInParent<PlayerController>().GetDamage(3f);
                 Destroy(this.gameObject);
             }
             if (cols[i].gameObject.layer != 10) Destroy(this.gameObject);

@@ -6,8 +6,10 @@ using UnityEngine.UI;
 
 public class MovePlayer : MonoBehaviour
 {
+    public int PlayerChange;
     public Text text;
-    public GameObject _GOPlayer;
+    private GameObject _GOPlayer;
+    //private ScriptableObject anim;
     public Vector2 _posPlayer, AtackCol = new Vector2(0.5f, 1f);
     public float Health = 5, timeLoad = 2, timeRunner = 0.2f,  timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2, _maxJump = 1060;
     private float  _speed, NormalGravityScale = 7, _speedRun = 1100,
@@ -16,6 +18,18 @@ public class MovePlayer : MonoBehaviour
     public bool _RightSide = false, _LeftSide = false, _DownSide = false, _RightBlc = false, _LeftBlc = false, _Runner = false, _Vector = false, rightMove = true; [HideInInspector]
     void Start()
     {
+        if (PlayerChange == 0)
+        {
+
+        }
+        else
+        {
+            if (PlayerChange == 1)
+            {
+                //anim = this.GetComponent<PlayerAnimationWoman>();
+            }
+        }
+        _GOPlayer = this.gameObject;
         _speed = _speedstandart;
         _posPlayer = _GOPlayer.transform.position;
         _GOPlayer.GetComponent<Rigidbody2D>().freezeRotation = true;
@@ -24,7 +38,6 @@ public class MovePlayer : MonoBehaviour
     {
         if (Health <=0 ) SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         setText();
-        LoadRun();
         MoveActive = checkMove();
         _posPlayer = _GOPlayer.transform.position;
         //если нажат прыжок
@@ -235,14 +248,5 @@ public class MovePlayer : MonoBehaviour
     /// <summary>
     /// загрузка спрайта
     /// </summary>
-    public void LoadRun()
-    {
-        if (procent != 1000)
-        {
-            procent += 1000 / (timeLoad * 100);
-            this.gameObject.GetComponent<LoadSprite>().SetLoad(procent);
-        }
-        else this.gameObject.GetComponent<LoadSprite>().SetLoad(0);
-    }
     // перезагрузка левэла
 }

@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuScript : MonoBehaviour
 {
     public GameObject StartCanvas, UnderCanvas;
+    public Text txt;
     public void LoadScene()
     {
         SceneManager.LoadScene("SampleScene");
@@ -18,5 +18,9 @@ public class MenuScript : MonoBehaviour
     {
         StartCanvas.SetActive(true);
         Destroy(UnderCanvas);
+    }
+    private void Start()
+    {
+        txt.text =  Application.version;
     }
 }

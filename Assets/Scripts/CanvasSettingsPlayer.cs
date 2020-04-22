@@ -5,16 +5,18 @@ using UnityEngine.UI;
 
 public class CanvasSettingsPlayer : MonoBehaviour
 {
+    [SerializeField] Image Load;
     GameObject Player;
-    MovePlayer mp;
+    PlayerController mp;
     private void Start()
     {
         Player = GameObject.Find("Player");
-        Player.GetComponent<MovePlayer>().text = this.GetComponentInChildren<Text>();
+        mp = Player.GetComponent<PlayerController>();
+       mp.text = this.GetComponentInChildren<Text>();
         Player.GetComponent<SpriteRenderer>().enabled = true;
-        Player.GetComponent<MovePlayer>().enabled = true;
+       mp.ActivePlayer = true;
         Player.GetComponent<Rigidbody2D>().isKinematic = false;
-        mp = Player.GetComponent<MovePlayer>();
+       mp.Load = Load;
     }
     #region UI
     public void Atack()
@@ -27,11 +29,11 @@ public class CanvasSettingsPlayer : MonoBehaviour
     }
     public void MoveLeft()
     {
-        mp.MoveLeft();
+        mp.Left();
     }
     public void MoveRight()
     {
-        mp.MoveRight();
+        mp.Right();
     }
     public void Run()
     {
@@ -39,7 +41,7 @@ public class CanvasSettingsPlayer : MonoBehaviour
     }
     public void MoveSitDown()
     {
-        mp.MoveSitDown();
+        mp.SitDown();
     }
     #endregion
 }

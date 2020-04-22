@@ -4,38 +4,38 @@ using UnityEngine;
 
 public class SodesPlayer : MonoBehaviour
 {
+    public LayerMask lm;
     public int mode = 1;
     public GameObject player;
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (mode == 1) player.GetComponent<MovePlayer>()._DownSide = true;
-        if (mode == 2) player.GetComponent<MovePlayer>()._RightSide = true;
-        if (mode == 3) player.GetComponent<MovePlayer>()._LeftSide = true;
+        if (mode == 2) player.GetComponent<PlayerController>()._RightSide = true;
+        if (mode == 3) player.GetComponent<PlayerController>()._LeftSide = true;
         if (collision.gameObject.tag == "StopBlock")
         {
-            if (mode == 2) player.GetComponent<MovePlayer>()._RightBlc = true;
-            if (mode == 3) player.GetComponent<MovePlayer>()._LeftBlc = true;
+            if (mode == 2) player.GetComponent<PlayerController>()._RightBlc = true;
+            if (mode == 3) player.GetComponent<PlayerController>()._LeftBlc = true;
         }
+    }
+    
+    private bool S()
+    {
+        List<Collider2D> arr = new List<Collider2D>(Physics2D.OverlapPointAll(this.transform.position, lm));
+        return arr.Count != 0;
+    }
+    private void Update()
+    {
+        if (mode == 4) player.GetComponent<PlayerController>()._JumpBlock = S();
+        if (mode == 1) player.GetComponent<PlayerController>()._DownSide  = S();
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (mode == 1) player.GetComponent<MovePlayer>()._DownSide = false;
-        if (mode == 2) player.GetComponent<MovePlayer>()._RightSide = false;
-        if (mode == 3) player.GetComponent<MovePlayer>()._LeftSide = false;
+        if (mode == 2) player.GetComponent<PlayerController>()._RightSide = false;
+        if (mode == 3) player.GetComponent<PlayerController>()._LeftSide = false;
         if (collision.gameObject.tag == "StopBlock")
         {
-            if (mode == 2) player.GetComponent<MovePlayer>()._RightBlc = false;
-            if (mode == 3) player.GetComponent<MovePlayer>()._LeftBlc = false;
+            if (mode == 2) player.GetComponent<PlayerController>()._RightBlc = false;
+            if (mode == 3) player.GetComponent<PlayerController>()._LeftBlc = false;
         }
-    }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
