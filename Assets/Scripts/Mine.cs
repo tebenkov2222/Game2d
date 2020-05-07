@@ -10,7 +10,7 @@ public class Mine : MonoBehaviour
     private bool Damage = false;
     void Update()
     {
-        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(this.transform.position, new Vector2(6, 1.6f), 0));
+        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(this.transform.position, new Vector2(3, 0.3f), 0));
         for (int i = 0; i < ColAttack.Count; ++i)
         {
             if (ColAttack[i].gameObject.name == "Player")
@@ -30,7 +30,7 @@ public class Mine : MonoBehaviour
     }
     public void StartAnim()
     {
-        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(this.transform.position, new Vector2(6, 1.6f), 0));
+        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(this.transform.position, new Vector2(3, 0.3f), 0));
         for (int i = 0; i < ColAttack.Count; ++i)
         {
             if (ColAttack[i].gameObject.name == "Player")

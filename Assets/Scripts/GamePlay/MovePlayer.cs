@@ -456,9 +456,7 @@ public class MovePlayer : MonoBehaviour
         {
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
             {
-                if (ColAttack[i].gameObject.tag == "Sceleton") if (ColAttack[i].gameObject.GetComponent<SceletonAPI>()) ColAttack[i].gameObject.GetComponent<SceletonAPI>().GetDamage(DamageRunner);
-                if (ColAttack[i].gameObject.tag == "Strazh") if (ColAttack[i].gameObject.GetComponent<MagScript>()) ColAttack[i].gameObject.GetComponent<MagScript>().GetDamage(DamageRunner);
-
+                if (ColAttack[i].gameObject.GetComponent<MobsController>()) ColAttack[i].gameObject.GetComponent<MobsController>().GetDamage(DamageRunner);
             }
         }
     }
@@ -471,8 +469,7 @@ public class MovePlayer : MonoBehaviour
             if (ColAttack[i].GetComponent<Fire>()) Destroy(ColAttack[i].gameObject);
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
             {
-                if (ColAttack[i].gameObject.tag == "Sceleton") if (ColAttack[i].gameObject.GetComponent<SceletonAPI>()) ColAttack[i].gameObject.GetComponent<SceletonAPI>().GetDamage(Damage);
-                if (ColAttack[i].gameObject.tag == "Strazh") if (ColAttack[i].gameObject.GetComponent<MagScript>()) ColAttack[i].gameObject.GetComponent<MagScript>().GetDamage(Damage);
+                if(ColAttack[i].gameObject.GetComponent<MobsController>()) ColAttack[i].gameObject.GetComponent<MobsController>().GetDamage(DamageRunner);
                 ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(ColAttack[i].gameObject.transform.position.x - this.transform.position.x, 1f) * forceDamage);
             }
         }
