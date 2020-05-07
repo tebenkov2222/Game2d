@@ -20,7 +20,7 @@ public class MagScript : MonoBehaviour
     #endregion
     void Start()
     {
-        speedRun = Random.Range(3, 4.5f);
+        speedRun = Random.Range(2, 2.5f);
         speedWalk = Random.Range(1, 2f);
         anim = this.GetComponent<Animator>();
         Rb = GetComponent<Rigidbody2D>();
@@ -43,7 +43,6 @@ public class MagScript : MonoBehaviour
                 if (!RightMove())
                 {
                     rightMove = !rightMove;
-                    Debug.Log("ROTATEMAG");
                     transform.Rotate(new Vector3(0, 180, 0));
                 }
                 if (!GoToPlayer())
@@ -107,8 +106,13 @@ public class MagScript : MonoBehaviour
         List<Collider2D> cols = new List<Collider2D>(Physics2D.OverlapCircleAll(this.gameObject.transform.position, MobsRadius));
         for (int i = 0; i < cols.Count; i++)
         {
-            if (cols[i].tag == "Strazh") if (cols[i].gameObject.GetComponent<MagScript>()) cols[i].gameObject.GetComponent<MagScript>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
-            if (cols[i].tag == "Sceleton") if (cols[i].gameObject.GetComponent<SceletonAPI>()) cols[i].gameObject.GetComponent<SceletonAPI>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+            RaycastHit2D hit1 = Physics2D.Raycast(eyeRaycast.transform.position, (cols[i].gameObject.transform.position - eyeRaycast.transform.position), MobsRadius, lmask);
+            RaycastHit2D hit2 = Physics2D.Raycast(BackeyeRaycast.transform.position, (cols[i].gameObject.transform.position - BackeyeRaycast.transform.position), MobsRadius, lmask);
+            if (hit1.collider.gameObject == cols[i].gameObject || hit2.collider.gameObject == cols[i].gameObject)
+            {
+                if (cols[i].tag == "Sceleton") if (cols[i].gameObject.GetComponent<SceletonAPI>()) cols[i].gameObject.GetComponent<SceletonAPI>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+                if (cols[i].tag == "Strazh") if (cols[i].gameObject.GetComponent<MagScript>()) cols[i].gameObject.GetComponent<MagScript>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+            }
         }
     }
     private bool RightMove()
@@ -155,7 +159,6 @@ public class MagScript : MonoBehaviour
     private bool Raycast(GameObject Start, bool timeRes)
     {
         RaycastHit2D hit = Physics2D.Raycast(Start.transform.position, (Player.transform.position - Start.transform.position), 40, lmask);
-        //Debug.DrawRay(Start.transform.position, (hit.transform.position - Start.transform.position), Color.red);
         if (hit.collider.gameObject.tag == "Player")
         {
             LastVisiblePositionPlayer = hit.transform.position;
@@ -200,7 +203,7 @@ public class MagScript : MonoBehaviour
         }
         if (Raycast(BackeyeRaycast, false))
         {
-            if (!Player.GetComponent<PlayerController>()._DownBool && Player.GetComponent<PlayerController>().MoveActive)
+            if (!Player.GetComponent<PlayerController>()._DownBool && Player.GetComponent<PlayerController>()._Movd)
             {
                 rightMove = !rightMove;
                 transform.Rotate(new Vector3(0, 180, 0));
@@ -222,7 +225,7 @@ public class MagScript : MonoBehaviour
     #region RunsToPLayerState
     private bool GoToPlayer()
     {
-        if (Vector3.Distance(eyeRaycast.gameObject.transform.position, Player.transform.position) > AtackRadius && !Atack)
+        if (Vector2.Distance(eyeRaycast.gameObject.transform.position, Player.transform.position) > AtackRadius && !Atack)
         {
             GetBoolFromEmpty();
             if (FBbool && !FWbool)
@@ -253,7 +256,11 @@ public class MagScript : MonoBehaviour
     {
         if (Damagebool) { 
             GameObject var = GameObject.Instantiate(firePrefab, Spawmer.transform.position, Quaternion.identity);
-            if (rightMove) var.GetComponent<Rigidbody2D>().velocity = new Vector2(1 * speedFire, 0);
+            if (rightMove)
+            {
+                var.GetComponent<SpriteRenderer>().flipX = true;
+                var.GetComponent<Rigidbody2D>().velocity = new Vector2(1 * speedFire, 0);
+            }
             else var.GetComponent<Rigidbody2D>().velocity = new Vector2(-1 * speedFire, 0);
         }
     }

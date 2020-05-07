@@ -1,45 +1,49 @@
 ﻿using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
-interface IAnimation
-{
-
-}
 public class PlayerController : MonoBehaviour
 {
-    public VariableJoystick variableJoystick;
     public LayerMask lm;
-    public GameObject AtackRegion, AtackRegionRunner;
+    public GameObject AtackRegion, AtackRegionRunner, ElevatorRegion;
     public Image Load;
     public Text text;
-    [HideInInspector] 
-    public bool 
-        ActivePlayer = true,
+    [HideInInspector]
+    public bool
+    #region UI Buttons
+        _AtackBool = false,
+        _JumpBool = false,
+        _LeftBool = false,
+        _RightBool = false,
+        _DownBool = false,
+        _UpBool = false,
+        _Runnerbool = false,
+        _SitBool = false,
+    #endregion
+    #region Sides
         _DownSide = false,
         _RightSide = false,
         _LeftSide = false,
         _RightBlc = false,
-        _LeftBlc = false;
-    [HideInInspector]
-    public bool 
-        _DamageMob = false,
-        _AtackBool = false, 
-        _JumpBool = false, 
-        _LeftBool = false, 
-        _RightBool = false,
-        _Runner = false,
-        _DownBool = false,
+        _LeftBlc = false,
+        _JumpSide = false,
+    #endregion
+    #region StatesPlayer
+        _ActivePlayer = true,
+        _AtackMob = false,
         _Damage = false,
-        MoveActive = false,
-        _JumpBlock = false,
-        _AnimationAtack = false,
-        _RunnerAtack = false;
-    private Vector2 TransformPositionAtackRegionStart;
+        _DamagePlayer = false,
+        _Movd = false;
+    #endregion
+    private bool Desctop;
+    private Vector2 TransformPositionAtackRegionStart,
+        TransformPositionAtackRegionRunnerStart;
     public float Health = 50;
     float procent = 1000,
         timeLoad = 2;
     private void Start()
     {
+        TransformPositionAtackRegionRunnerStart = AtackRegionRunner.transform.localPosition;
+        Desctop = SystemInfo.deviceType == DeviceType.Desktop;
         TransformPositionAtackRegionStart = AtackRegion.transform.localPosition;
     }
     public bool TrailEnabled()
@@ -55,22 +59,66 @@ public class PlayerController : MonoBehaviour
     public List<Collider2D> CheckAtackRegion(){return new List<Collider2D>(Physics2D.OverlapBoxAll(AtackRegion.transform.position, AtackRegion.transform.localScale, 0, lm));}
     private bool checkMove()
     {
-        if ((_LeftBool || _RightBool) && !_DownBool) return true;
+        if ((_LeftBool || _RightBool) && !_SitBool) return true;
         else return false;
     }
     public void LeftAtackRegion()
     {
-            AtackRegion.transform.localPosition = new Vector2(-1 * TransformPositionAtackRegionStart.x, TransformPositionAtackRegionStart.y);
+        AtackRegionRunner.transform.localPosition = new Vector2(-TransformPositionAtackRegionRunnerStart.x, TransformPositionAtackRegionRunnerStart.y);
+        AtackRegion.transform.localPosition = new Vector2(-1 * TransformPositionAtackRegionStart.x, TransformPositionAtackRegionStart.y);
     }
     public void RightAtackRegion()
     {
+        AtackRegionRunner.transform.localPosition = new Vector2(TransformPositionAtackRegionRunnerStart.x, TransformPositionAtackRegionRunnerStart.y);
         AtackRegion.transform.localPosition = new Vector2(TransformPositionAtackRegionStart.x, TransformPositionAtackRegionStart.y);
     }
-
-
-    private void Update()
+    private bool ElevatorTest()
     {
-        MoveActive = checkMove();
+
+        List<Collider2D> arr = new List<Collider2D>(Physics2D.OverlapBoxAll(ElevatorRegion.transform.position, ElevatorRegion.transform.localScale, 0)) ;
+        for (int i = 0; i < arr.Count; i++)
+        {
+            if (arr[i].gameObject.layer == 16) { return true; }
+        }
+        return false;
+    }
+    public void Elevate()
+    {
+        List<Collider2D> arr = new List<Collider2D>(Physics2D.OverlapBoxAll(ElevatorRegion.transform.position, ElevatorRegion.transform.localScale, 0));
+        for (int i = 0; i < arr.Count; i++)
+        {
+            if (arr[i].gameObject.layer == 16)
+            {
+                this.gameObject.transform.position = new Vector2(arr[i].transform.position.x, this.gameObject.transform.position.y);
+            }
+        }
+    }
+    private void FixedUpdate()
+    {
+        if (Desctop)
+        {
+            if (Input.GetKey(KeyCode.D))
+            {
+                _RightBool = true;
+            }
+            else _RightBool = false;
+            if (Input.GetKey(KeyCode.A))
+            {
+                _LeftBool = true;
+            }
+            else _LeftBool = false;
+            if (Input.GetKey(KeyCode.S))
+            {
+                _DownBool = true;
+            }
+            else _DownBool = false;
+            if (Input.GetKey(KeyCode.W))
+            {
+                _UpBool = true;
+            }
+            else _UpBool = false;
+        }
+        _Movd = checkMove();
         LoadRun();
         setText();
     }
@@ -79,36 +127,44 @@ public class PlayerController : MonoBehaviour
     {
         _AtackBool = true;
     }
-    public void Jump()
+    public void Jump(bool State)
     {
-        _JumpBool = !_JumpBool;
+        _JumpBool = State;
     }
-    public void Left()
+    public void Down(bool State)
     {
-        _LeftBool = !_LeftBool;
+        if (!Desctop) _DownBool = State;
     }
-    public void Right()
+    public void Up(bool State)
     {
-        _RightBool = !_RightBool;
+        if (!Desctop) _UpBool = State;
+    }
+    public void Left(bool State)
+    {
+        if (!Desctop) _LeftBool = State;
+    }
+    public void Right(bool State)
+    {
+        if (!Desctop) _RightBool = State;
     }
     public void Run()
     {
         if (procent == 1000)
         {
-            _Runner = true;
+            _Runnerbool = true;
             procent = 0;
         }
     }
     public void SitDown()
     {
-        _DownBool = !_DownBool;
+        _SitBool = !_SitBool;
     }
 
     public bool SetRun()
     {
-        if (_Runner)
+        if (_Runnerbool)
         {
-            _Runner = false;
+            _Runnerbool = false;
             return true;
         }
         else return false;
@@ -124,20 +180,21 @@ public class PlayerController : MonoBehaviour
         else return false;
 
     }
+
     public void LoadRun()
     {
         if (procent != 1000)
         {
-            procent += 1000 / (timeLoad * 100);
+            procent += 10 / (timeLoad * 100 * Time.deltaTime);
             SetLoad(procent);
         }
         else SetLoad(0);
     }
-    public bool SetDamageMobs()
+    public bool SetAtackMobs()
     {
-        if (_DamageMob)
+        if (_AtackMob)
         {
-            _DamageMob = false;
+            _AtackMob = false;
             return true;
         }
         else return false;
@@ -147,6 +204,11 @@ public class PlayerController : MonoBehaviour
         Load.fillAmount = proc / 1000;
     }
     #endregion
+    private bool Life()
+    {
+        if (Health > 0) return true;
+        return false;
+    }
     public bool SetDamage()
     {
         if (_Damage)
@@ -156,33 +218,47 @@ public class PlayerController : MonoBehaviour
         }
         else return false;
     }
+    /// <summary>
+   ///   SetAtack(), 
+   ///  _JumpBool,
+   ///  _LeftBool,
+   ///  _RightBool,
+   ///  _DownBool,
+   ///  _UpBool, 
+   ///  SetRun(),
+   ///  _SitBool,
+   ///  SetDamage(),
+   ///  _DownSide,
+   ///  _RightSide,
+   ///  _LeftSide,
+   ///  _RightBlc,
+   ///  _LeftBlc,
+   ///  _JumpSide,
+   ///  SetDamageMobs(),
+    /// </summary>
+    /// <returns></returns>
     public List<bool> GetAllDatabool()
     {
         return new List<bool>
         {
-            SetAtack(),
+            SetAtack(), // buttons
             _JumpBool,
             _LeftBool,
             _RightBool,
-            SetRun(),
             _DownBool,
+            _UpBool, 
+            SetRun(),
+            _SitBool,
             SetDamage(),
             _DownSide,
             _RightSide,
             _LeftSide,
             _RightBlc,
             _LeftBlc,
-            _JumpBlock,
-            SetDamageMobs(),
-            _AnimationAtack,
-            _RunnerAtack
-        };
-    }
-    public List<float> GetAllDatafloat()
-    {
-        return new List<float>
-        {
-            Health
+            _JumpSide,
+            SetAtackMobs(),
+            Life(),
+            ElevatorTest()
         };
     }
 

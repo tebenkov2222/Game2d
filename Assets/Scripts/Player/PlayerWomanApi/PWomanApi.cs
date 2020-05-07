@@ -14,8 +14,8 @@ public class PWomanApi : MonoBehaviour
     public float forceDamage = 200,timeLoad = 2, timeRunner = 0.2f, timeAtackRes = 0.5f, radiusAtack = 2f, DamageRunner = 10f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2, _maxJump = 1060;
     private float _speed, NormalGravityScale = 7, _speedRun = 1100,
         _timeRun = 0, timeUnderJump = 0, timeBlock = 0;
-    [HideInInspector] public bool _Die = false, _JumpBool = false, _AtackBool = false, _LeftBool = false, _RightBool = false, _DownBool = false, _StopBlock = false, MoveActive = false, movel = false;
-    public bool _DamageMobs = false, _JumpBlock = false, _RightSide = false, _LeftSide = false, _DownSide = false, _RightBlc = false, _LeftBlc = false, _Runner = false, _Vector = false, rightMove = true;[HideInInspector]
+    [HideInInspector] public bool _Die = false, _JumpBool = false, _AtackBool = false, _LeftBool = false, _RightBool = false, _DownBool = false, _StopBlock = false, _Movd = false, movel = false;
+    public bool _DamageMobs = false, _JumpSide = false, _RightSide = false, _LeftSide = false, _DownSide = false, _RightBlc = false, _LeftBlc = false, _Runner = false, _Vector = false, rightMove = true;[HideInInspector]
     void Start()
     {
         anim = this.GetComponent<Animator>();
@@ -28,9 +28,9 @@ public class PWomanApi : MonoBehaviour
     {
 
         if (_Die) SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        MoveActive = checkMove();
+        _Movd = checkMove();
         //если нажат прыжок
-        if (_JumpBlock)
+        if (_JumpSide)
         {
             anim.SetBool("Jump", false);
             anim.SetBool("JumpUp", false);
@@ -118,7 +118,7 @@ public class PWomanApi : MonoBehaviour
         if ((_LeftBool || _RightBool)&& _DownSide && ! _Runner) anim.SetBool("Run", true);
         else anim.SetBool("Run", false);
         // если не бежит
-        if (!_Runner && !Controller._AnimationAtack)
+        if (!_Runner)
         {
             // если нажата левая кнопка и слева свободно
             if (_LeftBool && !_LeftSide)
@@ -203,7 +203,6 @@ public class PWomanApi : MonoBehaviour
     }
     void AtackAnimation()
     {
-        Controller._AnimationAtack = true;
         int n = Random.Range(0, 3);
         if (n == 0) anim.SetBool("SwordAtack", true);
         if (n == 1) anim.SetBool("SwordAtackSitDown", true);
@@ -240,16 +239,16 @@ public class PWomanApi : MonoBehaviour
         _DownBool = Databool[5];
         if (Databool[6])
         {
-            List<float> Datafloat = Controller.GetAllDatafloat();
-            float Health = Datafloat[0];
-            if (Health <= 0) _Die = true;
+            //List<float> Datafloat = Controller.GetAllDatafloat();
+            //float Health = Datafloat[0];
+            //if (Health <= 0) _Die = true;
         }//анимация смерти
         _DownSide = Databool[7];
         _RightSide = Databool[8];
         _LeftSide = Databool[9];
         _RightBlc = Databool[10];
         _LeftBlc = Databool[11];
-        _JumpBlock = Databool[12];
+        _JumpSide = Databool[12];
         _DamageMobs = Databool[13];
 
 

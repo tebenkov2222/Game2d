@@ -7,35 +7,30 @@ public class SodesPlayer : MonoBehaviour
     public LayerMask lm;
     public int mode = 1;
     public GameObject player;
-    private void OnTriggerStay2D(Collider2D collision)
+    private bool StopBlockCheck()
     {
-        if (mode == 2) player.GetComponent<PlayerController>()._RightSide = true;
-        if (mode == 3) player.GetComponent<PlayerController>()._LeftSide = true;
-        if (collision.gameObject.tag == "StopBlock")
+        List<Collider2D> arr = new List<Collider2D>(Physics2D.OverlapBoxAll(this.transform.position, this.transform.localScale, 0, lm));
+        for (int i = 0; i < arr.Count; i++)
         {
-            if (mode == 2) player.GetComponent<PlayerController>()._RightBlc = true;
-            if (mode == 3) player.GetComponent<PlayerController>()._LeftBlc = true;
+            if (arr[i].tag == "StopBlock") return true;
         }
+        return false;
     }
-    
-    private bool S()
+
+    private bool SBox()
     {
-        List<Collider2D> arr = new List<Collider2D>(Physics2D.OverlapPointAll(this.transform.position, lm));
+        List<Collider2D> arr = new List<Collider2D>(Physics2D.OverlapBoxAll(this.transform.position,this.transform.localScale,0 , lm));
         return arr.Count != 0;
     }
     private void Update()
     {
-        if (mode == 4) player.GetComponent<PlayerController>()._JumpBlock = S();
-        if (mode == 1) player.GetComponent<PlayerController>()._DownSide  = S();
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (mode == 2) player.GetComponent<PlayerController>()._RightSide = false;
-        if (mode == 3) player.GetComponent<PlayerController>()._LeftSide = false;
-        if (collision.gameObject.tag == "StopBlock")
-        {
-            if (mode == 2) player.GetComponent<PlayerController>()._RightBlc = false;
-            if (mode == 3) player.GetComponent<PlayerController>()._LeftBlc = false;
-        }
+        if (mode == 1) player.GetComponent<PlayerController>()._DownSide = SBox();
+        if (mode == 2) player.GetComponent<PlayerController>()._RightSide = SBox();
+        if (mode == 3) player.GetComponent<PlayerController>()._LeftSide = SBox();
+        if (mode == 4) player.GetComponent<PlayerController>()._JumpSide = SBox();
+        //StopBlock
+        if (mode == 2) player.GetComponent<PlayerController>()._RightBlc = StopBlockCheck();
+        if (mode == 3) player.GetComponent<PlayerController>()._LeftBlc = StopBlockCheck();
+
     }
 }

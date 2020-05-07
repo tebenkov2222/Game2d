@@ -10,7 +10,7 @@ public class EmptyCheck : MonoBehaviour
         cols = new List<Collider2D>(Physics2D.OverlapPointAll(this.gameObject.transform.position));
         for (int i = 0; i < cols.Count; ++i)
         {
-            if (cols[i].gameObject.tag == "Level")
+            if (cols[i].gameObject.tag == "Level" )
             {
                 return true;
             }

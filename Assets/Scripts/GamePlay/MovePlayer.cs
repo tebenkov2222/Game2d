@@ -6,142 +6,182 @@ using UnityEngine.UI;
 
 public class MovePlayer : MonoBehaviour
 {
-    public int PlayerChange;
-    public Text text;
+    #region Player
     private GameObject _GOPlayer;
-    //private ScriptableObject anim;
-    public Vector2 _posPlayer, AtackCol = new Vector2(0.5f, 1f);
-    public float Health = 5, timeLoad = 2, timeRunner = 0.2f,  timeAtackRes = 0.5f, radiusAtack = 2f, Damage = 5f, _speedstandart = 20, _speedSitDown = 10, Force = 2, _maxJump = 1060;
-    private float  _speed, NormalGravityScale = 7, _speedRun = 1100,
-        _timeRun = 0, procent = 1000;
-    [HideInInspector] public bool _JumpBool = false, _AtackBool = false, _LeftBool = false, _RightBool = false, _DownBool = false, _StopBlock = false, MoveActive = false, movel = false;
-    public bool _RightSide = false, _LeftSide = false, _DownSide = false, _RightBlc = false, _LeftBlc = false, _Runner = false, _Vector = false, rightMove = true; [HideInInspector]
-    void Start()
-    {
-        if (PlayerChange == 0)
-        {
+    private PlayerController Controller;
+    private Animator anim;
+    private Rigidbody2D rb;
+    private SpriteRenderer sprite;
+    #endregion
+    [SerializeField]
+    private float
+        velocityJumpDown = 8f;
+    public Vector2 VectorJumpVall
+        , AtackCol = new Vector2(0.5f, 1f);
+    public float forceDamage = 200, 
+        timeLoad = 2, 
+        timeRunner = 0.2f, 
+        timeAtackRes = 0.5f, 
+        radiusAtack = 2f, 
+        DamageRunner = 10f, 
+        Damage = 5f, 
+        _speedstandart = 20, 
+        _speedSitDown = 10, 
+        _speedElevatorUp = 4,
+        _speedElevatorDown = 8,
+        Force = 2, 
+        _maxJump = 1060;
+    private float 
+        NormalGravityScale = 7, 
+        _speedRun = 1100,
+        _timeRun = 0, 
+        timeUnderJump = 0, 
+        timeBlock = 0,
+        _timeLastMove = 0;
+    private int
+        _Runnerbool = 0;
+    [HideInInspector]
+    public bool
+    #region UI Buttons
+        _AtackBool = false,
+        _JumpBool = false,
+        _LeftBool = false,
+        _RightBool = false,
+        _DownBool = false,
+        _UpBool = false,
+        _SitBool = false,
+    #endregion
+    #region Sides
+        _DownSide = false,
+        _RightSide = false,
+        _LeftSide = false,
+        _RightBlc = false,
+        _LeftBlc = false,
+        _JumpSide = false,
+        _StopBlock = false,
+        _elevator = false,
+    #endregion
+    #region States
+        _AtackNow = false,
+        _Life = true,
+        _SwordIdle = false,
+        _JumpState = false,
+    _elevatorState = false;
+    #endregion
 
-        }
-        else
-        {
-            if (PlayerChange == 1)
-            {
-                //anim = this.GetComponent<PlayerAnimationWoman>();
-            }
-        }
+    void Awake()
+    {
+        #region Player
+        rb = this.GetComponent<Rigidbody2D>();
+        anim = this.GetComponent<Animator>();
+        Controller = this.GetComponent<PlayerController>();
         _GOPlayer = this.gameObject;
-        _speed = _speedstandart;
-        _posPlayer = _GOPlayer.transform.position;
-        _GOPlayer.GetComponent<Rigidbody2D>().freezeRotation = true;
+        rb.freezeRotation = true;
+        sprite = this.GetComponent<SpriteRenderer>();
+        #endregion
+    }
+    private void Start()
+    {
+        _timeLastMove = Time.time;
     }
     void FixedUpdate()
     {
-        if (Health <=0 ) SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        setText();
-        MoveActive = checkMove();
-        _posPlayer = _GOPlayer.transform.position;
-        //если нажат прыжок
-        if (_JumpBool)
+        GetData();
+        if (_Life)
         {
-            // если снизу есть спрайт
-            if (_DownSide)
+            Move();
+            MoveJumped();
+            Jump();
+            Atack();
+            CheckIdle();
+            StopBlock();
+            JumpVall();
+            Runner();
+            Atack();
+            CheckVerticleJoystik();
+        }
+        else {
+            Controller.Health = 50;
+            DontDestroyOnLoad(this.gameObject);
+            SceneManager.LoadScene("Finish"); 
+        }
+    }
+    #region Main
+    private void Atack()
+    {
+        if (_AtackBool)
+        {
+            _AtackBool = false;
+            AtackAnimation();
+            
+        }
+        if (_AtackNow)
+        {
+            _AtackNow = false;
+            AtackVoid();
+        }
+    }
+   private void CheckVerticleJoystik()
+    {
+        if (_elevatorState)
+        {
+            Controller.Elevate();
+        }
+        if (_DownSide)
+        {
+            _elevatorState = false;
+        }
+        if (_elevator)
+        {
+            if (!_UpBool && !_DownBool && _elevatorState)
             {
-                _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * _maxJump);
+                StateElevate = AnimElevate.Idle;
+                rb.velocity = new Vector2(0, 0);
             }
-            else
+            if (_UpBool)
             {
-                // если справа или слева есть waypoint block 
-                if (_RightBlc || _LeftBlc)
-                {
-                    _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = 0;
-                    _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-                    _StopBlock = true;
-                }
-                else
-                {
-                    _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = NormalGravityScale;
-                }
-                if ((_LeftSide || _StopBlock) || (_RightSide || _StopBlock))
-                {
-                    _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y);
-                }
-                // если справа блок и нажата левая кнопка
-                if ((_RightSide || _StopBlock )&& _LeftBool)
-                {
-                    movel = true;
-                    _StopBlock = false;
-                    _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-                    _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(0.1f, 1f) * _maxJump);
-                    rightMove = true;
-                }
-                // если слева блок и нажата правая кнопка 
-                if ((_LeftSide || _StopBlock) && _RightBool)
-                {
-                    movel = true;
-                    _StopBlock = false;
-                    _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-                    _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(-0.1f, 1f) * _maxJump);
-                    rightMove = false;
-                }
+                Physics2D.IgnoreLayerCollision(10, 15, true);
+                State = AnimState.Elevate;
+                StateElevate = AnimElevate.Up;
+                _elevatorState = true;
+                rb.gravityScale = 0;
+                rb.velocity = new Vector2(0, _speedElevatorUp);
+            }
+            if (_DownBool && !_DownSide)
+            {
+                _elevatorState = true;
+                State = AnimState.Elevate;
+                StateElevate = AnimElevate.Down;
+                rb.velocity = new Vector2(0, -_speedElevatorDown);
+                Physics2D.IgnoreLayerCollision(10, 15, true);
+            }
+            if (!_DownSide && _elevatorState)
+            {
+                rb.gravityScale = 0;
+            }
+            if (_LeftBool || _RightBool && _elevatorState)
+            {
+                State = AnimState.Idle;
+                _elevatorState = false;
             }
         }
-        else
+        if (_DownBool)
         {
-            _StopBlock = false;
-            _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = NormalGravityScale;
+            Physics2D.IgnoreLayerCollision(10, 15, true);
         }
-        // если не бежит
-        if (!_Runner) 
+    }
+    private void Runner()
+    {
+        if (_Runnerbool!= 0)
         {
-            // если нажата левая кнопка и слева свободно
-            if (_LeftBool && !_LeftSide)
+            State = AnimState.Runner;
+            Controller.TrailRunner(true);
+            rb.gravityScale = 0;
+            rb.velocity = new Vector2(0, 0);
+            AtackVoidRunner();
+            if (!sprite.flipX) // вправо
             {
-                movel = true;
-                _Vector = true;
-                _GOPlayer.GetComponent<SpriteRenderer>().flipX = true;
-                this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.transform.localPosition = new Vector2(-2, -0.5f);
-                this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                _GOPlayer.transform.position += new Vector3(-0.01f * _speed, 0, 0);
-                rightMove = false;
-            }
-            // если нажата правая кнопка и справа свободно
-            if (_RightBool && !_RightSide)
-            {
-                movel = true;
-                _Vector = false;
-                _GOPlayer.GetComponent<SpriteRenderer>().flipX = false;
-                this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.transform.localPosition = new Vector2(2, -0.5f);
-                this.gameObject.GetComponentInChildren<AtackAnimation>().gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                _GOPlayer.transform.position += new Vector3(0.01f * _speed, 0, 0);
-                rightMove = true;
-            }
-        }
-        // если снизу спрайт
-        if (_DownSide) movel = false;
-        // если плеер в воздухе и 
-        if (!_DownSide && !_LeftBool && !_RightBool && !_RightSide && !_LeftSide && movel)
-        {
-            movel = false;
-            if (rightMove) _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector3(_speed/ 4, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y, 0);
-            else _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector3(-_speed / 4, _GOPlayer.GetComponent<Rigidbody2D>().velocity.y, 0);
-        }
-        if (_DownBool) // если в присяди
-        {
-            _speed = _speedSitDown;
-        }
-        else
-        {
-            _speed = _speedstandart;
-        }
-        if (_Runner) // если бег
-        {
-            this.gameObject.GetComponent<TrailRenderer>().enabled = true;
-            _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = 0;
-            _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-            AtackVoid(this.gameObject, new Vector2(0.1f,0.1f));
-            if (!_Vector) // вправо
-            {
-                _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(1f * Force,0) * _speedRun);
+                _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(1f * Force, 0) * _speedRun);
             }
             else // влево
             {
@@ -149,104 +189,311 @@ public class MovePlayer : MonoBehaviour
             }
             if (Time.time - _timeRun > timeRunner) // если прошло больше, чем время рывка
             {
-                
-                _Runner = false;
-                _GOPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-                _GOPlayer.GetComponent<Rigidbody2D>().isKinematic = true;
-                _GOPlayer.GetComponent<Rigidbody2D>().isKinematic = false;
-                _GOPlayer.GetComponent<Rigidbody2D>().gravityScale = NormalGravityScale;
+                State = AnimState.Idle;
+                _Runnerbool = 0;
+                rb.velocity = new Vector2(0, 0);
+                rb.isKinematic = true;
+                rb.isKinematic = false;
+                rb.gravityScale = NormalGravityScale;
+                Controller.TrailRunner(false);
             }
         }
-        if (this.gameObject.GetComponent<TrailRenderer>().enabled) // если трейл включен
+    }
+    private void Move()
+    {
+        if ( _DownSide && 
+            _Runnerbool == 0 && 
+            State != AnimState.AtackHand &&
+            State != AnimState.AtackBow &&
+            State != AnimState.AtackBowJumped &&
+            State != AnimState.AtackBowSit &&
+            State != AnimState.AtackSword &&
+            State != AnimState.AtackSwordForward &&
+            State != AnimState.AtackSwordSit)
         {
-            if (Time.time - _timeRun > timeRunner+0.2f) // если прошло больше, чем нажатие на кнопку и время трейла
+            if (!_RightSide && _RightBool)
             {
-                this.gameObject.GetComponent<TrailRenderer>().enabled = false;
+                State = AnimState.Run;
+                MoveForward(Speed(), true);
+            }
+            if (!_LeftSide && _LeftBool)
+            {
+                State = AnimState.Run;
+                MoveForward(Speed(), false);
             }
         }
-        if (_AtackBool) // если нажата кнопка атаковать
+    }
+    private void CheckMovePlayer()
+    {
+        if (_AtackBool || _JumpBool || _LeftBool || _RightBool || _DownBool || _UpBool) _timeLastMove = Time.time;
+    }
+    private void MoveJumped()
+    {
+        if (!_DownSide && _Runnerbool == 0)
         {
-            AtackVoid(this.GetComponentInChildren<AtackAnimation>().gameObject, AtackCol);
-            this.gameObject.GetComponentInChildren<AtackAnimation>().Atack();
+            if (!_RightSide && _RightBool)
+            {
+                MoveForward(Speed(), true);
+            }
+            if (!_LeftSide && _LeftBool)
+            {
+                MoveForward(Speed(), false);
+            }
         }
-
     }
-
-    /// <summary>
-    /// провека на передвижение плеера
-    /// </summary>
-    /// <returns></returns>
-    private bool checkMove()
+    private void CheckIdle()
     {
-        if (_LeftBool || _RightBool) return true;
-        else return false;
+        CheckMovePlayer();
+        if (!_elevatorState)
+        {
+            if (
+                _DownSide &&
+                !_RightBool &&
+                !_LeftBool &&
+                State != AnimState.AtackBow &&
+                State != AnimState.AtackBowJumped &&
+                State != AnimState.AtackBowSit &&
+                State != AnimState.AtackHand &&
+                State != AnimState.AtackSword &&
+                State != AnimState.AtackSwordForward &&
+                State != AnimState.AtackSwordSit
+                )
+            {
+                if (Time.time - _timeLastMove < 10) State = AnimState.Idle;
+                else
+                {
+                    _SwordIdle = true;
+                    State = AnimState.SwordIdle;
+                }
+            }
+        }
     }
+    private void Jump()
+    {
+        CheckStateJump();
+        if (!_DownSide && !_RightBlc && !_LeftBlc && !_elevatorState)
+        {
+            State = AnimState.Jump;
+        }
+        if (_JumpSide && rb.velocity.y < velocityJumpDown && !_DownSide && !_elevatorState)
+        {
+            _JumpState = false;
+            State = AnimState.Idle;
+        }
+        if (_JumpState && rb.velocity.y <= 0) _JumpState = false;
+        if (!_SwordIdle && !_elevatorState && _JumpBool )
+        {
+            if (_DownSide)
+            {
+                State = AnimState.Jump;
+                if (Time.time - timeUnderJump > 0.5f)
+                {
+                    _JumpState = true;
+                    Physics2D.IgnoreLayerCollision(10, 15, true);
+                    timeUnderJump = Time.time;
+                    _GOPlayer.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * _maxJump);
+                }
+            }
+        }
+    }
+    private void StopBlock()
+    {
+        if (_JumpBool)
+        {
+            if ((_RightBlc || _LeftBlc))
+            {
+                if ((Time.time - timeBlock > 0.5f))
+                {
+                    timeBlock = Time.time;
+                    State = AnimState.PlayerBlock;
+                    rb.gravityScale = 0;
+                    rb.velocity = new Vector2(0, 0);
+                    _StopBlock = true;
+                }
+            }
+            else rb.gravityScale = NormalGravityScale;
+        }
+        else
+        {
+            rb.gravityScale = NormalGravityScale;
+        }
+    }
+    private void JumpVall()
+    {
+        if (_JumpBool && (_RightSide || _RightBlc || _LeftBlc) && _LeftBool && (Time.time - timeUnderJump > 0.2f))
+        {
+            timeUnderJump = Time.time;
+            State = AnimState.Jump;
+            StateJump = AnimJump.JumpUp;
+            rb.velocity = new Vector2(0, 0);
+            rb.isKinematic = true;
+            rb.isKinematic = false;
+            rb.AddForce(new Vector2(-VectorJumpVall.x, VectorJumpVall.y) * _maxJump);
+        }
+        if (_JumpBool && (_LeftSide || _LeftBlc || _RightBlc) && _RightBool && (Time.time - timeUnderJump > 0.2f))
+        {
+            timeUnderJump = Time.time;
+            State = AnimState.Jump;
+            StateJump = AnimJump.JumpUp;
+            rb.isKinematic = true;
+            rb.isKinematic = false;
+            rb.velocity = new Vector2(0, 0);
+            rb.AddForce(new Vector2(VectorJumpVall.x, VectorJumpVall.y) * _maxJump);
+        }
+    }
+    float Speed()
+    {
+        if (_SitBool) return _speedSitDown;
+        else return _speedstandart;
+    }
+
+    #endregion
+
+
+
     #region UI
-    public void Atack()
+    void AtackAnimation()
     {
-        _AtackBool = !_AtackBool;
+        int n = Random.Range(0, 3);
+        if (n == 0) State = AnimState.AtackSword;
+        if (n == 1) State = AnimState.AtackSwordSit;
+        if (n == 2) State = AnimState.AtackSwordForward;
     }
-    public void Jump()
+    private void CheckStateJump()
     {
-        _JumpBool = !_JumpBool;
+        if (rb.velocity.y < velocityJumpDown) StateJump = AnimJump.JumpDown;
+        else StateJump = AnimJump.JumpUp;
     }
-    public void MoveLeft()
+    #region Enum
+    public AnimState State
     {
-        _LeftBool = !_LeftBool;
+        get { return (AnimState)anim.GetInteger("State"); }
+        set { anim.SetInteger("State", (int)value); }
     }
-    public void MoveRight()
+    private AnimElevate StateElevate
     {
+        get { return (AnimElevate)anim.GetInteger("StateElevate"); }
+        set { anim.SetInteger("StateElevate", (int)value); }
+    }
+    private AnimJump StateJump
+    {
+        get { return (AnimJump)anim.GetInteger("StateJump"); }
+        set { anim.SetInteger("StateJump", (int)value); }
+    }
+    public enum AnimJump
+    {
+        JumpDown,
+        JumpUp
+    }
+    public enum AnimElevate
+    {
+        Up,
+        Idle,
+        Down
+    }
+    public enum AnimState
+    {
+        Idle,
+        SwordIdle,
+        AtackBow,
+        AtackBowSit,
+        AtackBowJumped,
+        AtackSword,
+        AtackSwordSit,
+        AtackSwordForward,
+        AtackHand,
+        Jump,
+        Damage,
+        TeleportStart,
+        TeleportIdle,
+        TeleportEnd,
+        Run,
+        Runner,
+        PlayerBlock,
+        Elevate
+    }
+    #endregion
 
-        _RightBool = !_RightBool;
-    }
-    public void Run()
+    void GetData()
     {
-        if (procent == 1000)
+        List<bool> Databool = Controller.GetAllDatabool();
+        _AtackBool = Databool[0];
+        _JumpBool = Databool[1];
+        _LeftBool = Databool[2];
+        _RightBool = Databool[3];
+        _DownBool = Databool[4];
+        _UpBool = Databool[5];
+        if (Databool[6]) // Run 
         {
             _timeRun = Time.time;
-            _Runner = true;
-            procent = 0;
+            _Runnerbool = 1;
         }
-    }
-    public void MoveSitDown()
-    {
-        _DownBool = !_DownBool;
+        _SitBool = Databool[7];
+        if (Databool[8]) // Damage
+        {
+            State = AnimState.Damage;
+        }//анимация смерти
+        _DownSide = Databool[9];
+        _RightSide = Databool[10];
+        _LeftSide = Databool[11];
+        _RightBlc = Databool[12];
+        _LeftBlc = Databool[13];
+        _JumpSide = Databool[14];
+        if (Databool[15]) // Atack
+        {
+            _AtackNow = true;
+        }
+        _Life = Databool[16];
+        _elevator = Databool[17];
     }
     #endregion
     //атаковать
-    private void AtackVoid(GameObject Center, Vector2 Scale )
+    private void AtackVoidRunner()
     {
         _AtackBool = false;
-        List<Collider2D> ColAttack = new List<Collider2D>(Physics2D.OverlapBoxAll(Center.transform.position, Scale , 0));
+        List<Collider2D> ColAttack = Controller.CheckRunerAtackRegion();
+        for (int i = 0; i < ColAttack.Count; ++i)
+        {
+            if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
+            {
+                if (ColAttack[i].gameObject.tag == "Sceleton") if (ColAttack[i].gameObject.GetComponent<SceletonAPI>()) ColAttack[i].gameObject.GetComponent<SceletonAPI>().GetDamage(DamageRunner);
+                if (ColAttack[i].gameObject.tag == "Strazh") if (ColAttack[i].gameObject.GetComponent<MagScript>()) ColAttack[i].gameObject.GetComponent<MagScript>().GetDamage(DamageRunner);
+
+            }
+        }
+    }
+    private void AtackVoid()
+    {
+        List<Collider2D> ColAttack = Controller.CheckAtackRegion();
         for (int i = 0; i < ColAttack.Count; ++i)
         {
             if (ColAttack[i].GetComponent<TeleportRoomScript>()) ColAttack[i].GetComponent<TeleportRoomScript>().Teleported();
             if (ColAttack[i].GetComponent<Fire>()) Destroy(ColAttack[i].gameObject);
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
             {
-                if (ColAttack[i].gameObject.tag == "Sceleton") ColAttack[i].gameObject.GetComponent<SceletonAPI>().GetDamage(Damage);
-                if (ColAttack[i].gameObject.tag == "Strazh") ColAttack[i].gameObject.GetComponent<MagScript>().GetDamage(Damage);
-                ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(ColAttack[i].gameObject.transform.position.x - this.transform.position.x, 0) * 200);
+                if (ColAttack[i].gameObject.tag == "Sceleton") if (ColAttack[i].gameObject.GetComponent<SceletonAPI>()) ColAttack[i].gameObject.GetComponent<SceletonAPI>().GetDamage(Damage);
+                if (ColAttack[i].gameObject.tag == "Strazh") if (ColAttack[i].gameObject.GetComponent<MagScript>()) ColAttack[i].gameObject.GetComponent<MagScript>().GetDamage(Damage);
+                ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(ColAttack[i].gameObject.transform.position.x - this.transform.position.x, 1f) * forceDamage);
             }
         }
     }
-    private void setText()
+    private void MoveForward(float speed, bool rightMove)
     {
-        text.text = Health.ToString();
-    }
-    public void GetDamage(float damage)
-    {
-        if (Random.Range(0,50) == 1)
+        if (!_SwordIdle)
         {
-            Health -= damage * 0.3f;
-        }
-        else
-        {
-            Health -= damage;
+            if (rightMove)
+            {
+                Controller.RightAtackRegion();
+                sprite.flipX = false;
+                _GOPlayer.transform.position += new Vector3(1 * speed * Time.deltaTime, 0, 0);
+            }
+            else
+            {
+                Controller.LeftAtackRegion();
+                sprite.flipX = true;
+                _GOPlayer.transform.position += new Vector3(-1 * speed * Time.deltaTime, 0, 0);
+            }
         }
     }
-    /// <summary>
-    /// загрузка спрайта
-    /// </summary>
     // перезагрузка левэла
 }

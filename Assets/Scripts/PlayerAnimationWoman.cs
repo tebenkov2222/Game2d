@@ -18,6 +18,10 @@ public class PlayerAnimationWoman : MonoBehaviour
     {
 
     }
+    public void EndAnimationSwordIdle()
+    {
+        this.GetComponent<MovePlayer>()._SwordIdle = false;
+    }
     public void EndBowAtack()
     {
         anim.SetBool("AtackBow", false);
@@ -27,13 +31,10 @@ public class PlayerAnimationWoman : MonoBehaviour
         anim.SetBool("AtackBowSitDown", false);
     }
     public void EndBowAtackJumped(){anim.SetBool("AtackBowJumped", false);}
-    public void SwordAtack(){this.GetComponent<PlayerController>()._DamageMob = true;}
+    public void SwordAtack(){this.GetComponent<PlayerController>()._AtackMob = true;}
     public void endSwordAtack()
     {
-        this.GetComponent<PlayerController>()._AnimationAtack = false;
-        anim.SetBool("SwordAtack", false);
-        anim.SetBool("SwordAtackSitDown", false);
-        anim.SetBool("SwordAtackForward", false);
+        anim.SetInteger("State", 0);
         //ATACK VOID
     }
     public void EndHandAtack()

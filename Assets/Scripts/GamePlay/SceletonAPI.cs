@@ -19,8 +19,8 @@ public class SceletonAPI : MonoBehaviour
     #endregion
     void Start()
     {
-        speedRun = Random.Range(4, 5.5f);
-        speedWalk = Random.Range(2, 2.5f);
+        speedRun = Random.Range(2, 3.5f);
+        speedWalk = Random.Range(1f, 2f);
         anim = this.GetComponent<Animator>();
         Rb = GetComponent<Rigidbody2D>();
         Player = GameObject.Find("Player");
@@ -109,8 +109,13 @@ public class SceletonAPI : MonoBehaviour
         List<Collider2D> cols = new List<Collider2D>(Physics2D.OverlapCircleAll(this.gameObject.transform.position, MobsRadius));
         for (int i = 0; i < cols.Count; i++)
         {
-            if (cols[i].tag == "Sceleton") if (cols[i].gameObject.GetComponent<SceletonAPI>()) cols[i].gameObject.GetComponent<SceletonAPI>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
-            if (cols[i].tag == "Strazh") if(cols[i].gameObject.GetComponent<MagScript>()) cols[i].gameObject.GetComponent<MagScript>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+            RaycastHit2D hit1 = Physics2D.Raycast(eyeRaycast.transform.position, (cols[i].gameObject.transform.position - eyeRaycast.transform.position), MobsRadius, lmask);
+            RaycastHit2D hit2 = Physics2D.Raycast(BackeyeRaycast.transform.position, (cols[i].gameObject.transform.position - BackeyeRaycast.transform.position), MobsRadius, lmask);
+            if (hit1.collider.gameObject == cols[i].gameObject || hit2.collider.gameObject == cols[i].gameObject)
+            {
+                if (cols[i].tag == "Sceleton") if (cols[i].gameObject.GetComponent<SceletonAPI>()) cols[i].gameObject.GetComponent<SceletonAPI>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+                if (cols[i].tag == "Strazh") if (cols[i].gameObject.GetComponent<MagScript>()) cols[i].gameObject.GetComponent<MagScript>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+            }
         }
     }
     private bool RightMove()
@@ -163,7 +168,6 @@ public class SceletonAPI : MonoBehaviour
     private bool Raycast(GameObject Start, bool timeRes, bool Eye)
     {
         RaycastHit2D hit = Physics2D.Raycast(Start.transform.position, (Player.transform.position - Start.transform.position), 40, lmask);
-        Debug.DrawRay(Start.transform.position, (hit.transform.position - Start.transform.position), Color.red);
         if (hit.collider.gameObject.tag == "Player" && Eye)
         {
             LastVisiblePositionPlayer = hit.transform.position;
@@ -209,9 +213,8 @@ public class SceletonAPI : MonoBehaviour
         }
         if (Raycast(BackeyeRaycast, false,true) && BackEye())
         {
-            if (Player.GetComponent<PlayerController>().MoveActive)
+            if (Player.GetComponent<PlayerController>()._Movd)
             {
-                Debug.Log("FIND");
                 rightMove = !rightMove;
                 transform.Rotate(new Vector3(0, 180, 0));
             }
@@ -271,7 +274,7 @@ public class SceletonAPI : MonoBehaviour
                 if (ColAttack[i].gameObject.name == "Player")
                 {
                     ColAttack[i].gameObject.GetComponent<PlayerController>().GetDamage(Damage);
-                    ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(Player.transform.position.x - this.transform.position.x, 0.5f) * 100);
+                    ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(Player.transform.position.x - this.transform.position.x, 1f) * 300);
                 }
             }
         }
@@ -283,7 +286,11 @@ public class SceletonAPI : MonoBehaviour
         GetBoolFromEmpty();
         if (FBbool && !FWbool)
         {
-            if (Bbool) GoForward(speedWalk);
+            if (Bbool)
+            {
+                SetAnim(false, true, false, false);
+                GoForward(speedWalk);
+            }
             State = false;
         }
         else

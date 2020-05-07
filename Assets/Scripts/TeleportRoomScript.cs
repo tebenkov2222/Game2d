@@ -33,7 +33,6 @@ public class TeleportRoomScript : MonoBehaviour
     }
     public void Teleported()
     {
-        Debug.Log(CheckAllMobs());
         if (CheckAllMobs())
         {
             Player = GameObject.Find("Player");
@@ -49,7 +48,7 @@ public class TeleportRoomScript : MonoBehaviour
                     DontDestroyOnLoad(Player);
                 }
                 Player.transform.position = PlayerEmpty.transform.position;
-                Player.GetComponent<PlayerController>().ActivePlayer = false;
+                Player.GetComponent<PlayerController>()._ActivePlayer = false;
                 Player.GetComponent<Rigidbody2D>().isKinematic = true;
                 this.GetComponent<Animator>().Play("TeleportLevel", 0);
 
@@ -57,7 +56,7 @@ public class TeleportRoomScript : MonoBehaviour
             else
             {
                 Player.transform.position = PlayerEmpty.transform.position;
-                Player.GetComponent<PlayerController>().ActivePlayer = false;
+                Player.GetComponent<PlayerController>()._ActivePlayer = false;
                 Player.GetComponent<Rigidbody2D>().isKinematic = true;
                 this.GetComponent<Animator>().Play("TeleportRoom", 0);
             }

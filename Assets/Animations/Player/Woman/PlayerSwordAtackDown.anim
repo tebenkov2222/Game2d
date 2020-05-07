@@ -91,7 +91,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 0.48333332
+  - time: 0.41666666
     functionName: endSwordAtack
     data: 
     objectReferenceParameter: {fileID: 0}

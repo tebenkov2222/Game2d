@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4674997570063870070}
   - component: {fileID: 4674997570063870069}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: StopBlock
   m_TagString: StopBlock
   m_Icon: {fileID: 0}
