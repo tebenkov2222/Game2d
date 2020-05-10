@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveCamera : MonoBehaviour
 {
     public GameObject _GOPlayer, _Camera;
-    public float _deltaX = 2, _deltayUP = 10, _deltayDown = 10;
+    public float _deltaX = 2, _deltayUP = 10, _deltayDown = 10, t = 0.1f;
     void Start()
     {
         _GOPlayer = GameObject.Find("Player");
@@ -17,19 +17,19 @@ public class MoveCamera : MonoBehaviour
     {
         if (_GOPlayer.transform.position.x - _deltaX > _Camera.transform.position.x)
         {
-            _Camera.transform.position = new Vector3(_GOPlayer.transform.position.x - _deltaX, _Camera.transform.position.y, -10);
+            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_GOPlayer.transform.position.x - _deltaX, _Camera.transform.position.y,-10), t);
         }
         if (_GOPlayer.transform.position.x + _deltaX < _Camera.transform.position.x)
         {
-            _Camera.transform.position = new Vector3(_GOPlayer.transform.position.x + _deltaX, _Camera.transform.position.y, -10);
+            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_GOPlayer.transform.position.x + _deltaX, _Camera.transform.position.y,-10), t);
         }
         if (_GOPlayer.transform.position.y - _deltayUP > _Camera.transform.position.y)
         {
-            _Camera.transform.position = new Vector3(_Camera.transform.position.x, _GOPlayer.transform.position.y - _deltayUP, -10);
+            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_Camera.transform.position.x, _GOPlayer.transform.position.y - _deltayUP,-10), t);
         }
         if (_GOPlayer.transform.position.y + _deltayDown < _Camera.transform.position.y)
         {
-            _Camera.transform.position = new Vector3(_Camera.transform.position.x, _GOPlayer.transform.position.y + _deltayDown, -10);
+            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_Camera.transform.position.x, _GOPlayer.transform.position.y + _deltayDown,-10), t); 
         }
     }
 }

@@ -7,7 +7,6 @@ public class MagScript : MonoBehaviour
     [SerializeField] GameObject firePrefab, Spawmer;
     Animator anim;
     MobsController Controller;
-    public int Damage = 0;
     private bool
         endAnimAtack = true,
         Damagebool = false;
@@ -46,6 +45,7 @@ public class MagScript : MonoBehaviour
     {
         if (State == (int)MobsController.StateMobs.Atack)
         {
+            if (StateMag != MobsController.StateMobs.Atack) timeLastAtackPlayer = Time.time;
             StateMag = MobsController.StateMobs.Atack;
             if (Time.time - timeLastAtackPlayer > timePlayerAtack)
             {
@@ -68,7 +68,7 @@ public class MagScript : MonoBehaviour
     }
     private bool rightMove()
     {
-        return (this.transform.rotation.eulerAngles.y == 180f);
+        return Controller.rightMove;
     }
     private void AtackVoid()
     {
@@ -85,7 +85,6 @@ public class MagScript : MonoBehaviour
     }
     public void DeleteAPI()
     {
-        Destroy(this.gameObject.GetComponent<Animator>());
         Destroy(this);
     }
     #endregion

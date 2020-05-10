@@ -63,7 +63,8 @@ public class MobsController : MonoBehaviour
     public bool
         FBSodes = false,
         BSodes = false,
-        FWSodes = false;
+        FWSodes = false,
+        rightMove = true;
     #endregion
     private GameObject Player;
     private float timefromState = 0,
@@ -74,7 +75,6 @@ public class MobsController : MonoBehaviour
         AtackAnim = false,
         Atack_Ready = false,
         playerFinded = false,
-        rightMove = true,
         endAnimAtack = true;
     private Vector3 LastVisiblePositionPlayer;
     #endregion
@@ -106,8 +106,8 @@ public class MobsController : MonoBehaviour
                 }
                 if (!GoToPlayer())
                 {
-                    if (!Raycast(eyeRaycast, true, !BackEye())) StateMob = StateMobs.Idle;
-                    else StateMob = StateMobs.Atack;
+                    if (CheckAtackPlayer()) StateMob = StateMobs.Atack;
+                    else StateMob = StateMobs.Idle;
                 }
             }
             else { IdleState(); }
@@ -173,6 +173,10 @@ public class MobsController : MonoBehaviour
     private bool CheckLastPositionPlayer()
     {
         return Mathf.Abs(this.transform.position.x - LastVisiblePositionPlayer.x) > AtackRadius;
+    }
+    private bool CheckAtackPlayer()
+    {
+        return Mathf.Abs(this.transform.position.y - LastVisiblePositionPlayer.y) < AtackRadius;
     }
     private bool RightMove()
     {

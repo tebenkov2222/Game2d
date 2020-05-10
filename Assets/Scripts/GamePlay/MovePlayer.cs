@@ -465,8 +465,9 @@ public class MovePlayer : MonoBehaviour
         List<Collider2D> ColAttack = Controller.CheckAtackRegion();
         for (int i = 0; i < ColAttack.Count; ++i)
         {
+            Debug.Log(ColAttack[i].name);
             if (ColAttack[i].GetComponent<TeleportRoomScript>()) ColAttack[i].GetComponent<TeleportRoomScript>().Teleported();
-            if (ColAttack[i].GetComponent<Fire>()) Destroy(ColAttack[i].gameObject);
+            if (ColAttack[i].GetComponent<Fire>()) ColAttack[i].GetComponent<Fire>().Destroy();
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
             {
                 if(ColAttack[i].gameObject.GetComponent<MobsController>()) ColAttack[i].gameObject.GetComponent<MobsController>().GetDamage(DamageRunner);

@@ -43,13 +43,13 @@ public class SceletonAPI : MonoBehaviour
     }
     private void CheckAtackMode()
     {
-        if (!endAnimAtack) StateSceleton = MobsController.StateMobs.Atack;
         if (State == (int)MobsController.StateMobs.Atack)
         {
             if (Time.time - timeLastAtackPlayer > timePlayerAtack)
             {
                 Debug.Log("Time");
                 StateSceleton = MobsController.StateMobs.Atack;
+                anim.Play("SceletonAtack");
                 timeLastAtackPlayer = Time.time;
                 endAnimAtack = false;
             }
@@ -81,7 +81,6 @@ public class SceletonAPI : MonoBehaviour
             {
                 if (ColAttack[i].gameObject.name == "Player")
                 {
-                    Debug.Log("Damage");
                     ColAttack[i].gameObject.GetComponent<PlayerController>().GetDamage(Damage);
                     ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(Player.transform.position.x - this.transform.position.x, 1f) * 300);
                     break;
@@ -91,7 +90,6 @@ public class SceletonAPI : MonoBehaviour
     }
     public void DeleteAPI()
     {
-        Destroy(this.gameObject.GetComponent<Animator>());
         Destroy(this);
     }
     #endregion
