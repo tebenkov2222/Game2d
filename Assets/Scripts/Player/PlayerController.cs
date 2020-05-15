@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public GameObject AtackRegion, AtackRegionRunner, ElevatorRegion;
     public Image Load;
     public Text text;
+    public string TagWeapons;
     [HideInInspector]
     public bool
     #region UI Buttons
@@ -37,14 +38,29 @@ public class PlayerController : MonoBehaviour
     private bool Desctop;
     private Vector2 TransformPositionAtackRegionStart,
         TransformPositionAtackRegionRunnerStart;
-    public float Health = 50;
+    public float Health = 50, HealthMax = 50;
     float procent = 1000,
         timeLoad = 2;
+    public int ArrowNow,
+        ArrowMax= 5;
     private void Start()
     {
+        ArrowNow = ArrowMax;
         TransformPositionAtackRegionRunnerStart = AtackRegionRunner.transform.localPosition;
         Desctop = SystemInfo.deviceType == DeviceType.Desktop;
         TransformPositionAtackRegionStart = AtackRegion.transform.localPosition;
+    }
+    public bool GetArrow()
+    {
+        return ArrowNow != 0;
+    }
+    public void ArrowMinus()
+    {
+        ArrowNow--;
+    }
+    public string GetTagWeapons()
+    {
+        return TagWeapons;
     }
     public bool TrailEnabled()
     {
@@ -120,7 +136,6 @@ public class PlayerController : MonoBehaviour
         }
         _Movd = checkMove();
         LoadRun();
-        setText();
     }
     #region UI
     public void Atack()
@@ -262,10 +277,6 @@ public class PlayerController : MonoBehaviour
         };
     }
 
-    public void setText()
-    {
-        text.text = Health.ToString();
-    }
     public void GetDamage(float damage)
     {
         if (Random.Range(0, 50) == 1)

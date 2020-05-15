@@ -5,6 +5,7 @@ using UnityEngine;
 public class MobsController : MonoBehaviour
 {
     #region public
+    public LayerMask MaskDiy;
     [SerializeField] private float 
         Health = 5, 
         AtackRadius = 1f, 
@@ -117,6 +118,7 @@ public class MobsController : MonoBehaviour
         }
         else
         {
+            this.gameObject.layer = 12;
             StateMob = StateMobs.Death;
             for (int i = 0; i < 6; ++i) Destroy(transform.GetChild(i).gameObject);
             Destroy(this);

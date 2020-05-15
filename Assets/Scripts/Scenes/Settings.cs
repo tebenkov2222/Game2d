@@ -8,16 +8,27 @@ public class Settings : MonoBehaviour
     public Vector2[] offsets;
     public GameObject 
         Sensetive,
-        dropBox;
+        dropBox,
+        Togle;
+    public void Visible()
+    {
+        bool value = Togle.GetComponent<Toggle>().isOn;
+        if (value) PlayerPrefs.SetInt("Visible", 1);
+        else PlayerPrefs.SetInt("Visible", 0);
+    }
     public void SensetiveSet()
     {
-        float value = 1 - Sensetive.GetComponent<Slider>().value;
+        float value = Sensetive.GetComponent<Slider>().value;
         PlayerPrefs.SetFloat("Sensetive", value);
     }
     public void SetStandartValueSesAndDropBox()
     {
         if (PlayerPrefs.HasKey("Joystick")) dropBox.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("Joystick");
         if (PlayerPrefs.HasKey("Sensetive")) Sensetive.GetComponent<Slider>().value = PlayerPrefs.GetFloat("Sensetive");
+        if (PlayerPrefs.HasKey("Visible"))
+        {
+            Togle.GetComponent<Toggle>().isOn = (PlayerPrefs.GetInt("Visible") == 1);
+        }
     }
     public void ChangeJoystik()
     {
@@ -33,19 +44,25 @@ public class Settings : MonoBehaviour
     }
     public void Load(GameObject[] objs)
     {
-        for (int i = 0; i < objs.Length; i++)
+        if (PlayerPrefs.HasKey("Saved"))
         {
-            //Debug.Log(objs[i].name + " " + PosObj(objs[i].name) + " " + SclObj(objs[i].name));
-            objs[i].GetComponent<RectTransform>().anchoredPosition = PosObj(objs[i].name);
-            objs[i].GetComponent<RectTransform>().localScale = SclObj(objs[i].name);
+            for (int i = 0; i < objs.Length; i++)
+            {
+                //Debug.Log(objs[i].name + " " + PosObj(objs[i].name) + " " + SclObj(objs[i].name));
+                objs[i].GetComponent<RectTransform>().anchoredPosition = PosObj(objs[i].name);
+                objs[i].GetComponent<RectTransform>().localScale = SclObj(objs[i].name);
+            }
         }
     }
     public void LoadOnSettings()
     {
-        for (int i = 0; i < objects.Length; i++)
+        if (PlayerPrefs.HasKey("Saved"))
         {
-            objects[i].GetComponent<RectTransform>().anchoredPosition = PosObj(objects[i].name);
-            objects[i].transform.localScale = SclObj(objects[i].name) * offsets[i];
+            for (int i = 0; i < objects.Length; i++)
+            {
+                objects[i].GetComponent<RectTransform>().anchoredPosition = PosObj(objects[i].name);
+                objects[i].transform.localScale = SclObj(objects[i].name) * offsets[i];
+            }
         }
     }
     public Vector3 SclObj(string name)

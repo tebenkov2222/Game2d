@@ -13,15 +13,19 @@ public class CanvasSettingsPlayer : MonoBehaviour
     public FloatingJoystick FloatingJoystick;
     public DynamicJoystick DynamicJoystick;
     public FixedJoystick FixedJoystick;
-    [SerializeField] Image Load;
+    public GameObject Debugging;
+    [SerializeField] Image Load, Health, endurance;
     GameObject Player;
     PlayerController mp;
     float Sensetive = 0.3f,
         Horizontal,
         Vertical;
     int SetJoystick = -1;
+    public bool debug = false;
+    float DebugTimeLast = 0;
     private void Start()
     {
+        Debugging.SetActive(PlayerPrefs.GetInt("Debugging") == 1);
         if (PlayerPrefs.HasKey("Saved")) PlayerPrefs.SetInt("Saved", 1);
         LoadAllSettingsObject();
         Player = GameObject.Find("Player");
@@ -32,13 +36,26 @@ public class CanvasSettingsPlayer : MonoBehaviour
         Player.GetComponent<Rigidbody2D>().isKinematic = false;
        mp.Load = Load;
     }
+    private void SetHealth()
+    {
+        print((float)mp.ArrowNow / mp.ArrowMax);
+        endurance.fillAmount = (float) mp.ArrowNow / mp.ArrowMax;
+        Health.fillAmount = mp.Health / mp.HealthMax;
+    }
     void changeJoystick()
     {
-        int value = PlayerPrefs.GetInt("Joystick");
+        bool visible = true;
+        if (PlayerPrefs.HasKey("Visible"))
+        {
+            visible = (PlayerPrefs.GetInt("Visible") == 1);
+        }
+            int value = PlayerPrefs.GetInt("Joystick");
         if (SetJoystick != value)
         {
             for (int i = 0; i < 3; i++)
             {
+                //Joysticks[i].GetComponent<Image>().enabled = visible;
+                //Joysticks[i].GetComponentInChildren<Image>().enabled = visible;
                 JoysticksVariable[i].SetActive(false);
             }
             SetJoystick = value;
@@ -61,8 +78,7 @@ public class CanvasSettingsPlayer : MonoBehaviour
     }
     private void CheckSensetive()
     {
-        if (PlayerPrefs.HasKey("Sensetive")) Sensetive = PlayerPrefs.GetFloat("Sensetive");
-        Debug.Log(Sensetive);
+        if (PlayerPrefs.HasKey("Sensetive")) Sensetive = 1 - PlayerPrefs.GetFloat("Sensetive");
     }
     private void GetAxis()
     {
@@ -85,6 +101,7 @@ public class CanvasSettingsPlayer : MonoBehaviour
     }
     private void Update()
     {
+        SetHealth();
         LoadAllSettingsObject();
         CheckSensetive();
         GetAxis();
@@ -127,4 +144,5 @@ public class CanvasSettingsPlayer : MonoBehaviour
         mp.SitDown();
     }
     #endregion
+    
 }

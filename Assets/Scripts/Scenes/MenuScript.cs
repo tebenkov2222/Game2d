@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class MenuScript : MonoBehaviour
 {
-    public GameObject StartCanvas, UnderCanvas;
+    public GameObject StartCanvas, UnderCanvas, KeyCodeCanvas;
     public Text txt;
     public void LoadScene()
     {
@@ -18,6 +18,11 @@ public class MenuScript : MonoBehaviour
     {
         StartCanvas.SetActive(true);
         Destroy(UnderCanvas);
+    }
+    public void KeyCodeActive()
+    {
+        KeyCodeCanvas.SetActive(true);
+        StartCanvas.SetActive(false);
     }
     private void Start()
     {

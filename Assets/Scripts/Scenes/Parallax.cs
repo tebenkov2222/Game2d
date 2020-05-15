@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Parallax : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Parallax : MonoBehaviour
     public float parallexEffect;
     void Start()
     {
+        cam = GameObject.Find("Main Camera");
         startposx = transform.position.x;
         startposy = transform.position.y;
         lengthx  = GetComponentInChildren<SpriteRenderer>().bounds.size.x;

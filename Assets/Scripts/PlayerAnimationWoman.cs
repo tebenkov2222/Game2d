@@ -10,27 +10,23 @@ public class PlayerAnimationWoman : MonoBehaviour
     {
         anim = this.gameObject.GetComponent<Animator>();
     }
-    public void StartBowAtack(bool State)
-    {
-
-    }
-    public void BowAtack()
-    {
-
-    }
     public void EndAnimationSwordIdle()
     {
         this.GetComponent<MovePlayer>()._SwordIdle = false;
     }
+    public void SpawnArrow()
+    {
+        if (this.GetComponent<PlayerController>().ArrowNow != 0)
+        {
+            this.GetComponent<PlayerController>().ArrowMinus();
+            this.GetComponent<MovePlayer>()._ArrowSpawn = true;
+        }
+    }
     public void EndBowAtack()
     {
-        anim.SetBool("AtackBow", false);
+        anim.SetInteger("State", 0);
+        this.GetComponent<PlayerController>()._AtackMob = true;
     }
-    public void EndBowAtackSitDown()
-    {
-        anim.SetBool("AtackBowSitDown", false);
-    }
-    public void EndBowAtackJumped(){anim.SetBool("AtackBowJumped", false);}
     public void SwordAtack(){this.GetComponent<PlayerController>()._AtackMob = true;}
     public void endSwordAtack()
     {

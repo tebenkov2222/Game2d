@@ -3,7 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#region Interfaces
+interface Atack
+{
+    Vector2 StartPosition { get; set; }
+    void Atack();
+}
+class ArrowAtack : Atack
+{
+    public Vector2 StartPosition { get; set; }
+    public void Atack()
+    {
 
+    }
+}
+class ArrowAtackSit : Atack
+{
+    public Vector2 StartPosition { get; set; }
+    public void Atack()
+    {
+
+    }
+}
+#endregion
 public class MovePlayer : MonoBehaviour
 {
     #region Player
@@ -13,29 +35,33 @@ public class MovePlayer : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
     #endregion
+    [SerializeField] private GameObject Arrow, SpawnerArrow;
     [SerializeField]
     private float
         velocityJumpDown = 8f;
-    public Vector2 VectorJumpVall
+    public Vector2
+        VectorJumpVall
         , AtackCol = new Vector2(0.5f, 1f);
-    public float forceDamage = 200, 
-        timeLoad = 2, 
-        timeRunner = 0.2f, 
-        timeAtackRes = 0.5f, 
-        radiusAtack = 2f, 
-        DamageRunner = 10f, 
-        Damage = 5f, 
-        _speedstandart = 20, 
-        _speedSitDown = 10, 
+    public float
+        ForceArrow = 10,
+        forceDamage = 200,
+        timeLoad = 2,
+        timeRunner = 0.2f,
+        timeAtackRes = 0.5f,
+        radiusAtack = 2f,
+        DamageRunner = 10f,
+        Damage = 5f,
+        _speedstandart = 20,
+        _speedSitDown = 10,
         _speedElevatorUp = 4,
         _speedElevatorDown = 8,
-        Force = 2, 
+        Force = 2,
         _maxJump = 1060;
-    private float 
-        NormalGravityScale = 7, 
+    private float
+        NormalGravityScale = 7,
         _speedRun = 1100,
-        _timeRun = 0, 
-        timeUnderJump = 0, 
+        _timeRun = 0,
+        timeUnderJump = 0,
         timeBlock = 0,
         _timeLastMove = 0;
     private int
@@ -62,13 +88,14 @@ public class MovePlayer : MonoBehaviour
         _elevator = false,
     #endregion
     #region States
+        _ArrowSpawn = false,
         _AtackNow = false,
         _Life = true,
         _SwordIdle = false,
         _JumpState = false,
     _elevatorState = false;
     #endregion
-
+    private string TagWeapons;
     void Awake()
     {
         #region Player
@@ -79,6 +106,7 @@ public class MovePlayer : MonoBehaviour
         rb.freezeRotation = true;
         sprite = this.GetComponent<SpriteRenderer>();
         #endregion
+        TagWeapons = Controller.GetTagWeapons();
     }
     private void Start()
     {
@@ -89,6 +117,7 @@ public class MovePlayer : MonoBehaviour
         GetData();
         if (_Life)
         {
+            CheckAllArrow();
             Move();
             MoveJumped();
             Jump();
@@ -107,18 +136,37 @@ public class MovePlayer : MonoBehaviour
         }
     }
     #region Main
+    private GameObject vr;
     private void Atack()
     {
         if (_AtackBool)
         {
             _AtackBool = false;
-            AtackAnimation();
-            
+            if (TagWeapons == "Sword_Woman")
+            {
+                AtackAnimationSword();
+            }
+            else if (TagWeapons == "Arrow_Woman")
+            {
+                AtackAnimationArrow();
+            }
+        }
+        if (_ArrowSpawn)
+        {
+            _ArrowSpawn = false;
+            vr = Instantiate(Arrow, SpawnerArrow.transform.position, Quaternion   .identity);
+            if (this.GetComponent<SpriteRenderer>().flipX) vr.transform.Rotate(new Vector3(0, 180, 0));
+
         }
         if (_AtackNow)
         {
             _AtackNow = false;
-            AtackVoid();
+            if (TagWeapons == "Sword_Woman") AtackVoid();
+            else if (TagWeapons == "Arrow_Woman")
+            {
+                if (this.GetComponent<SpriteRenderer>().flipX) vr.GetComponent<Rigidbody2D>().AddForce(Vector2.left * ForceArrow);
+                else vr.GetComponent<Rigidbody2D>().AddForce(Vector2.right * ForceArrow);
+            }
         }
     }
    private void CheckVerticleJoystik()
@@ -168,6 +216,23 @@ public class MovePlayer : MonoBehaviour
         if (_DownBool)
         {
             Physics2D.IgnoreLayerCollision(10, 15, true);
+        }
+    }
+    private void CheckAllArrow()
+    {
+        List<Collider2D> ColAttack = Controller.CheckAtackRegion();
+        for (int i = 0; i < ColAttack.Count; ++i)
+        {
+            if (ColAttack[i].GetComponent<Arrow>())
+            {
+                print(ColAttack[i].GetComponent<Arrow>().Active);
+                if (!ColAttack[i].GetComponent<Arrow>().Active)
+                {
+                    Destroy(ColAttack[i].gameObject);
+                    Controller.ArrowNow++;
+                }
+            }
+
         }
     }
     private void Runner()
@@ -352,7 +417,15 @@ public class MovePlayer : MonoBehaviour
 
 
     #region UI
-    void AtackAnimation()
+    void AtackAnimationArrow()
+    {
+        State = AnimState.AtackBowSit;
+        /*int n = Random.Range(0, 3);
+        if (n == 0) State = AnimState.AtackBow;
+        if (n == 1) State = AnimState.AtackBowSit;
+        if (n == 2) State = AnimState.AtackBowJumped;*/
+    }
+    void AtackAnimationSword()
     {
         int n = Random.Range(0, 3);
         if (n == 0) State = AnimState.AtackSword;
@@ -416,6 +489,8 @@ public class MovePlayer : MonoBehaviour
 
     void GetData()
     {
+        print(TagWeapons);
+        TagWeapons = Controller.GetTagWeapons();
         List<bool> Databool = Controller.GetAllDatabool();
         _AtackBool = Databool[0];
         _JumpBool = Databool[1];
@@ -470,7 +545,7 @@ public class MovePlayer : MonoBehaviour
             if (ColAttack[i].GetComponent<Fire>()) ColAttack[i].GetComponent<Fire>().Destroy();
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
             {
-                if(ColAttack[i].gameObject.GetComponent<MobsController>()) ColAttack[i].gameObject.GetComponent<MobsController>().GetDamage(DamageRunner);
+                if(ColAttack[i].gameObject.GetComponent<MobsController>()) ColAttack[i].gameObject.GetComponent<MobsController>().GetDamage(Damage);
                 ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(ColAttack[i].gameObject.transform.position.x - this.transform.position.x, 1f) * forceDamage);
             }
         }

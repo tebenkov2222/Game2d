@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8097879561720181035}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Strazh
   m_TagString: Strazh
   m_Icon: {fileID: 0}
@@ -294,7 +294,6 @@ MonoBehaviour:
   firePrefab: {fileID: 7899774340453723264, guid: 63f06566205332048939175b6413e35e,
     type: 3}
   Spawmer: {fileID: 8097879561955145817}
-  Damage: 0
   timeLastAtackPlayer: 0
   timePlayerAtack: 2
   speedFire: 5
@@ -383,6 +382,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc8e69f0d56f44840adebe7bc2490170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaskDiy:
+    serializedVersion: 2
+    m_Bits: 4096
   Health: 5
   AtackRadius: 30
   SearchRadius: 15
@@ -408,6 +410,7 @@ MonoBehaviour:
   FBSodes: 0
   BSodes: 0
   FWSodes: 0
+  rightMove: 1
 --- !u!1 &8097879562223207238
 GameObject:
   m_ObjectHideFlags: 0
