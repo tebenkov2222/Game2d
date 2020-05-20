@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StopStack : MonoBehaviour
 {
+    public bool isBack = true;
     public GameObject LastStack;
     public void BackMenu()
     {
@@ -14,5 +15,18 @@ public class StopStack : MonoBehaviour
     {
         next.SetActive(true);
         this.gameObject.SetActive(false);
+    }
+    void Update()
+    {
+        if (isBack)
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    BackMenu();
+                }
+            }
+        }
     }
 }

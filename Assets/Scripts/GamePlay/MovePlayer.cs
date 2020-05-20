@@ -148,7 +148,7 @@ public class MovePlayer : MonoBehaviour
             }
             else if (TagWeapons == "Arrow_Woman")
             {
-                AtackAnimationArrow();
+                if (Controller.ArrowNow != 0) AtackAnimationArrow();
             }
         }
         if (_ArrowSpawn)

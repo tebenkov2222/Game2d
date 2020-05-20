@@ -6,9 +6,9 @@ public class MenuScript : MonoBehaviour
 {
     public GameObject StartCanvas, UnderCanvas, KeyCodeCanvas;
     public Text txt;
-    public void LoadScene()
+    public void LoadScene(string str)
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene(str);
     }
     public void Quit()
     {

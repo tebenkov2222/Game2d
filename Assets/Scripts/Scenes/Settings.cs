@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class Settings : MonoBehaviour
 {
@@ -9,12 +10,17 @@ public class Settings : MonoBehaviour
     public GameObject 
         Sensetive,
         dropBox,
-        Togle;
+        Togle,
+        Camera;
     public void Visible()
     {
         bool value = Togle.GetComponent<Toggle>().isOn;
         if (value) PlayerPrefs.SetInt("Visible", 1);
         else PlayerPrefs.SetInt("Visible", 0);
+    }
+    public void EnableRaycaster()
+    {
+        Camera.GetComponent<Physics2DRaycaster>().enabled = true;
     }
     public void SensetiveSet()
     {
@@ -56,6 +62,7 @@ public class Settings : MonoBehaviour
     }
     public void LoadOnSettings()
     {
+        Camera.GetComponent<Physics2DRaycaster>().enabled = false;
         if (PlayerPrefs.HasKey("Saved"))
         {
             for (int i = 0; i < objects.Length; i++)

@@ -13,7 +13,6 @@ public class CanvasSettingsPlayer : MonoBehaviour
     public FloatingJoystick FloatingJoystick;
     public DynamicJoystick DynamicJoystick;
     public FixedJoystick FixedJoystick;
-    public GameObject Debugging;
     [SerializeField] Image Load, Health, endurance;
     GameObject Player;
     PlayerController mp;
@@ -21,11 +20,8 @@ public class CanvasSettingsPlayer : MonoBehaviour
         Horizontal,
         Vertical;
     int SetJoystick = -1;
-    public bool debug = false;
-    float DebugTimeLast = 0;
     private void Start()
     {
-        Debugging.SetActive(PlayerPrefs.GetInt("Debugging") == 1);
         if (PlayerPrefs.HasKey("Saved")) PlayerPrefs.SetInt("Saved", 1);
         LoadAllSettingsObject();
         Player = GameObject.Find("Player");
@@ -67,7 +63,6 @@ public class CanvasSettingsPlayer : MonoBehaviour
         changeJoystick();
         if (PlayerPrefs.HasKey("Saved"))
         {
-            //Debug.Log("SavedIsFind = " + PlayerPrefs.GetInt("Saved"));
             if (PlayerPrefs.GetInt("Saved") == 1)
             {
                 PlayerPrefs.SetInt("Saved", 0);
