@@ -5,22 +5,35 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New PlayerObject", menuName = "Player", order = 51)]
 public class SPlayers : ScriptableObject
 {
-    [SerializeField] private Vector2 Position;
-    [SerializeField] private string tag;
-    public Vector2 GetSprite
+    [SerializeField] private float 
+        Speed, 
+        Damage_A,
+        Damage_B,
+        Health,
+        Arrows,
+        Money;
+    public float GetSpeed()
     {
-        get
-        {
-            return Position;
-        }
-        protected set { }
+        return Speed;
     }
-    public string GetTag
+    public float GetDamage_A()
     {
-        get
-        {
-            return tag;
-        }
-        protected set { }
+        return Damage_A;
+    }
+    public float GetDamage_B()
+    {
+        return Damage_B;
+    }
+    public float GetHealth()
+    {
+        return Health;
+    }
+    public int GetArrows()
+    {
+        return (int) Arrows;
+    }
+    public int GetMoney()
+    {
+        return (int) Money;
     }
 }

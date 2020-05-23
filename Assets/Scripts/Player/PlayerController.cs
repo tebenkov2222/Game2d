@@ -45,7 +45,8 @@ public class PlayerController : MonoBehaviour
         ArrowMax= 5;
     private void Start()
     {
-        ArrowNow = ArrowMax;
+        Health = HealthMax;
+           ArrowNow = ArrowMax;
         TransformPositionAtackRegionRunnerStart = AtackRegionRunner.transform.localPosition;
         Desctop = SystemInfo.deviceType == DeviceType.Desktop;
         TransformPositionAtackRegionStart = AtackRegion.transform.localPosition;

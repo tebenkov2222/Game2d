@@ -13,6 +13,7 @@ public class KeyCodeScripts : MonoBehaviour
         {
             PlayerPrefs.SetInt("Debugging", 1);
         }
+        else if (txt.text == "Debug.Log.False") PlayerPrefs.SetInt("Debugging", 0);
         txt.text = "";
         CanvasStart.SetActive(true);
         this.gameObject.SetActive(false);

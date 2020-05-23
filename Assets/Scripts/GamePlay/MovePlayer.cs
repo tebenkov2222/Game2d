@@ -28,6 +28,7 @@ class ArrowAtackSit : Atack
 #endregion
 public class MovePlayer : MonoBehaviour
 {
+    public SPlayers[] ScrObj;
     #region Player
     private GameObject _GOPlayer;
     private PlayerController Controller;
@@ -51,6 +52,7 @@ public class MovePlayer : MonoBehaviour
         radiusAtack = 2f,
         DamageRunner = 10f,
         Damage = 5f,
+        Damage_B = 5f,
         _speedstandart = 20,
         _speedSitDown = 10,
         _speedElevatorUp = 4,
@@ -107,7 +109,18 @@ public class MovePlayer : MonoBehaviour
         sprite = this.GetComponent<SpriteRenderer>();
         #endregion
         TagWeapons = Controller.GetTagWeapons();
+        GetDataScrObj();
     }
+    void GetDataScrObj() 
+    {
+        _speedstandart = ScrObj[PlayerPrefs.GetInt("WomanUpgrade")].GetSpeed();
+        _speedSitDown = _speedstandart - 3;
+        Damage = ScrObj[PlayerPrefs.GetInt("WomanUpgrade")].GetDamage_A();
+        Controller.ArrowMax = ScrObj[PlayerPrefs.GetInt("WomanUpgrade")].GetArrows();
+        Controller.HealthMax = ScrObj[PlayerPrefs.GetInt("WomanUpgrade")].GetHealth();
+        Damage_B = ScrObj[PlayerPrefs.GetInt("WomanUpgrade")].GetDamage_B();
+    }
+
     private void Start()
     {
         _timeLastMove = Time.time;
@@ -155,6 +168,7 @@ public class MovePlayer : MonoBehaviour
         {
             _ArrowSpawn = false;
             vr = Instantiate(Arrow, SpawnerArrow.transform.position, Quaternion   .identity);
+            vr.GetComponent<Arrow>().Damage = Damage_B;
             if (this.GetComponent<SpriteRenderer>().flipX) vr.transform.Rotate(new Vector3(0, 180, 0));
 
         }
@@ -540,7 +554,6 @@ public class MovePlayer : MonoBehaviour
         List<Collider2D> ColAttack = Controller.CheckAtackRegion();
         for (int i = 0; i < ColAttack.Count; ++i)
         {
-            Debug.Log(ColAttack[i].name);
             if (ColAttack[i].GetComponent<TeleportRoomScript>()) ColAttack[i].GetComponent<TeleportRoomScript>().Teleported();
             if (ColAttack[i].GetComponent<Fire>()) ColAttack[i].GetComponent<Fire>().Destroy();
             if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)

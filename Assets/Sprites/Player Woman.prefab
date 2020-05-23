@@ -356,6 +356,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -541,6 +542,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e180a17912fd0474f89e46ca1dff3218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScrObj:
+  - {fileID: 11400000, guid: c77c882080bb61748ae63a3073f88127, type: 2}
+  - {fileID: 11400000, guid: 0cbf1743e8359594ca6fa044cd2a2e34, type: 2}
+  - {fileID: 11400000, guid: b38d075a6822f50498b4f9dfcab80f02, type: 2}
+  - {fileID: 11400000, guid: f73620fee2a235b4bbd07657da01c3c5, type: 2}
+  - {fileID: 11400000, guid: e936f61d06c32a0439109ddf0ae1e07c, type: 2}
   Arrow: {fileID: 2245565820398365107, guid: decfcb426a5791649831bced9145aa2c, type: 3}
   SpawnerArrow: {fileID: 4753291560627300682}
   velocityJumpDown: 8
@@ -554,6 +561,7 @@ MonoBehaviour:
   radiusAtack: 2
   DamageRunner: 15
   Damage: 7
+  Damage_B: 5
   _speedstandart: 6
   _speedSitDown: 5
   _speedElevatorUp: 4
@@ -794,6 +802,7 @@ TrailRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

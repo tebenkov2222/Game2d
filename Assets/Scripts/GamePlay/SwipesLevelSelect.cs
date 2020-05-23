@@ -9,6 +9,7 @@ using UnityEngine.UI.Extensions;
 public class SwipesLevelSelect : MonoBehaviour
 {
     public string LevelName;
+    public Text Coins;
     public Vector2 posN, scalN, 
         posP, scalP,
         posU, scalU;
@@ -78,8 +79,13 @@ public class SwipesLevelSelect : MonoBehaviour
             SceneManager.LoadScene("Menu");
         }
     }
+    private void Awake()
+    {
+        if (!PlayerPrefs.HasKey("Coin")) PlayerPrefs.SetInt("Coin", 100);
+    }
     public void Update()
     {
+        Coins.text = PlayerPrefs.GetInt("Coin").ToString();
         if (Application.platform == RuntimePlatform.Android)
         {
             if (Input.GetKeyDown(KeyCode.Escape))

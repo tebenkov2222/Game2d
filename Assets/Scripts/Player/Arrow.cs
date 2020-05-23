@@ -43,7 +43,6 @@ public class Arrow : MonoBehaviour
     }
     public void Break()
     {
-        Debug.Log("NON");
         this.gameObject.layer = 10;
         this.GetComponent<BoxCollider2D>().isTrigger = false;
         this.GetComponent<Rigidbody2D>().gravityScale = 7;

@@ -26,11 +26,7 @@ using UnityEditor;
 
 using LunarConsolePluginInternal;
 
-#if UNITY_2020_1_OR_NEWER
-using CallbackFunction = System.Action;
-#else
 using CallbackFunction = UnityEditor.EditorApplication.CallbackFunction;
-#endif
 
 namespace LunarConsoleEditorInternal
 {
