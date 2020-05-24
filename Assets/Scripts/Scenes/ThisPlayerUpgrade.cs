@@ -39,8 +39,6 @@ public class ThisPlayerUpgrade : MonoBehaviour
     }
     void UpdateAllText()
     {
-        Money.text = Next.GetMoney().ToString();
-        Money.color = GetColorCoin(PlayerPrefs.GetInt("Coin") - Next.GetMoney());
 
         speedNow.text = Now.GetSpeed().ToString();
         Damage_ANow.text = Now.GetDamage_A().ToString();
@@ -49,6 +47,8 @@ public class ThisPlayerUpgrade : MonoBehaviour
         ArrowNow.text = Now.GetArrows().ToString();
         if (Next != null)
         {
+            Money.text = Next.GetMoney().ToString();
+            Money.color = GetColorCoin(PlayerPrefs.GetInt("Coin") - Next.GetMoney());
             speedNext.text = GetText(Next.GetSpeed() - Now.GetSpeed());
             Damage_ANext.text = GetText(Next.GetDamage_A() - Now.GetDamage_A());
             Damage_BNext.text = GetText(Next.GetDamage_B() - Now.GetDamage_B());
@@ -63,6 +63,7 @@ public class ThisPlayerUpgrade : MonoBehaviour
         }
         else
         {
+            Money.text = "MAX";
             speedNext.text = "MAX";
             Damage_ANext.text = "MAX";
             Damage_BNext.text = "MAX";

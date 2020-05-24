@@ -16,6 +16,7 @@ public class PlayerUpgrade : MonoBehaviour
     {
         if (value == 0)
         {
+            Debug.Log(PlayerPrefs.GetInt("WomanUpgrade"));
             if (PlayerPrefs.GetInt("WomanUpgrade") < 4) return SWoman[PlayerPrefs.GetInt("WomanUpgrade") + 1];
             else return null;
         }

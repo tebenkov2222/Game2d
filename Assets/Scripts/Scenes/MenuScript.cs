@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Android;
 
 public class MenuScript : MonoBehaviour
 {
@@ -26,6 +27,22 @@ public class MenuScript : MonoBehaviour
     }
     private void Start()
     {
+        CheckPermision(Permission.ExternalStorageRead);
+        CheckPermision(Permission.ExternalStorageWrite);
+        CheckPermision(Permission.Camera);
         txt.text =  Application.version;
+    }
+    void CheckPermision(string permission)
+    {
+        if (Permission.HasUserAuthorizedPermission(permission))
+        {
+            // The user authorized use of the microphone.
+        }
+        else
+        {
+            // We do not have permission to use the microphone.
+            // Ask for permission or proceed without the functionality enabled.
+            Permission.RequestUserPermission(permission);
+        }
     }
 }

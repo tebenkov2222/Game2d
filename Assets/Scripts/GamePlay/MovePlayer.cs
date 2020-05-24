@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Advertisements;
 #region Interfaces
 interface Atack
 {
@@ -143,9 +144,13 @@ public class MovePlayer : MonoBehaviour
             CheckVerticleJoystik();
         }
         else {
-            Controller.Health = 50;
             DontDestroyOnLoad(this.gameObject);
-            SceneManager.LoadScene("Finish"); 
+            if (PlayerPrefs.GetInt("Death") == 1)
+            {
+                Controller.Health = Controller.HealthMax;
+                SceneManager.LoadScene("Finish");
+            }
+            else if (PlayerPrefs.GetInt("Death") == 0) PlayerPrefs.SetInt("Death", -1);
         }
     }
     #region Main

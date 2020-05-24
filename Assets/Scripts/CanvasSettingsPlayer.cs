@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 public class CanvasSettingsPlayer : MonoBehaviour
 {
     public Settings settings;
@@ -13,15 +14,17 @@ public class CanvasSettingsPlayer : MonoBehaviour
     public FloatingJoystick FloatingJoystick;
     public DynamicJoystick DynamicJoystick;
     public FixedJoystick FixedJoystick;
+    public GameObject DeathTable;
     [SerializeField] Image Load, Health, endurance;
     GameObject Player;
-    PlayerController mp;
+    public PlayerController mp;
     float Sensetive = 0.3f,
         Horizontal,
         Vertical;
     int SetJoystick = -1;
     private void Start()
     {
+        PlayerPrefs.SetInt("Death", 0);
         if (PlayerPrefs.HasKey("Saved")) PlayerPrefs.SetInt("Saved", 1);
         LoadAllSettingsObject();
         Player = GameObject.Find("Player");
@@ -32,6 +35,7 @@ public class CanvasSettingsPlayer : MonoBehaviour
         Player.GetComponent<Rigidbody2D>().isKinematic = false;
        mp.Load = Load;
     }
+
     private void SetHealth()
     {
         print((float)mp.ArrowNow / mp.ArrowMax);
@@ -104,6 +108,12 @@ public class CanvasSettingsPlayer : MonoBehaviour
         if (Horizontal < -Sensetive) { MoveLeft(true); } else MoveLeft(false);
         if (Vertical > Sensetive) { Up(true); } else Up(false);
         if (Vertical < -Sensetive) { Down(true); } else Down(false);
+        if (PlayerPrefs.GetInt("Death") == -1)
+        {
+            Time.timeScale = 0.000001f;
+            DeathTable.SetActive(true);
+            this.gameObject.SetActive(false);
+        }
     }
     #region UI
     public void Up(bool State)
@@ -138,6 +148,8 @@ public class CanvasSettingsPlayer : MonoBehaviour
     {
         mp.SitDown();
     }
-    #endregion
+
     
+    #endregion
+
 }
