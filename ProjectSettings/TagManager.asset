@@ -46,6 +46,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: WallPaper
+    uniqueID: 1335667333
+    locked: 0
+  - name: NoLightDirection
+    uniqueID: 3535401933
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

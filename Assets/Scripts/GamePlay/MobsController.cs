@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class MobsController : MonoBehaviour
@@ -20,6 +19,7 @@ public class MobsController : MonoBehaviour
         SpeedWalkMin = 1,
         SpeedWalkMax = 2;
     public GameObject
+        ATackRegion,
         eyeRaycast, 
         BackeyeRaycast, 
         FwdBttmBoolGO, 
@@ -78,10 +78,12 @@ public class MobsController : MonoBehaviour
         playerFinded = false,
         endAnimAtack = true;
     private Vector3 LastVisiblePositionPlayer;
+    private SpriteRenderer spriteRenderer;
     #endregion
     void Start()
     {
-        speedRun = Random.Range(SpeedRunMin, SpeedRunMax);
+        spriteRenderer = this.GetComponent<SpriteRenderer>();
+           speedRun = Random.Range(SpeedRunMin, SpeedRunMax);
         speedWalk = Random.Range(SpeedWalkMin, SpeedWalkMax);
         Rb = GetComponent<Rigidbody2D>();
         Player = GameObject.Find("Player");
@@ -102,8 +104,7 @@ public class MobsController : MonoBehaviour
                 checkState();
                 if (!RightMove())
                 {
-                    rightMove = !rightMove;
-                    transform.Rotate(new Vector3(0, 180, 0));
+                    Rotate();
                 }
                 if (!GoToPlayer())
                 {
@@ -159,8 +160,8 @@ public class MobsController : MonoBehaviour
         {
             RaycastHit2D hit1 = Physics2D.Raycast(eyeRaycast.transform.position, (cols[i].gameObject.transform.position - eyeRaycast.transform.position), MobsRadius, lmask);
             RaycastHit2D hit2 = Physics2D.Raycast(BackeyeRaycast.transform.position, (cols[i].gameObject.transform.position - BackeyeRaycast.transform.position), MobsRadius, lmask);
-            if (hit1.collider.gameObject == cols[i].gameObject || hit2.collider.gameObject == cols[i].gameObject)
-                if (cols[i].gameObject.GetComponent<MobsController>()) cols[i].gameObject.GetComponent<MobsController>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
+            if (cols[i].gameObject.GetComponent<MobsController>())
+                if (hit1.collider.gameObject == cols[i].gameObject || hit2.collider.gameObject == cols[i].gameObject) cols[i].gameObject.GetComponent<MobsController>().PlayerFindOtherMobs(LastVisiblePositionPlayer);
         }
     }
     #region public void
@@ -190,6 +191,12 @@ public class MobsController : MonoBehaviour
     {
         if (Mathf.Abs(BackeyeRaycast.transform.position.x - LastVisiblePositionPlayer.x) <
             Mathf.Abs(eyeRaycast.transform.position.x - LastVisiblePositionPlayer.x)) return true;
+        else return false;
+    }
+    private bool BackEyepP()
+    {
+        if (Mathf.Abs(BackeyeRaycast.transform.position.x - Player.transform.position.x) <
+            Mathf.Abs(eyeRaycast.transform.position.x - Player.transform.position.x)) return true;
         else return false;
     }
     private bool Death()
@@ -256,9 +263,8 @@ public class MobsController : MonoBehaviour
     /// </summary>
     private void checkEye()
     {
-        if (Raycast(eyeRaycast, true, !BackEye()) && (Player.transform.position.y - this.transform.position.y) < heightFindPlayer)
+        if (Raycast(eyeRaycast, true, !BackEyepP()) && (Player.transform.position.y - this.transform.position.y) < heightFindPlayer)
         {
-
             SetFindOtherMobs();
             playerFinded = true;
             if (StateMobsGameObj.GetComponent<StateActive>().LastState != "Exc")
@@ -275,12 +281,11 @@ public class MobsController : MonoBehaviour
         {
             StateMobsGameObj.GetComponent<StateActive>().RenameLastState();
         }
-        if (Raycast(BackeyeRaycast, false, true) && BackEye())
+        if (Raycast(BackeyeRaycast, false, true) && BackEyepP())
         {
             if (Player.GetComponent<PlayerController>()._Movd)
             {
-                rightMove = !rightMove;
-                transform.Rotate(new Vector3(0, 180, 0));
+                Rotate();
             }
         }
     }
@@ -332,8 +337,7 @@ public class MobsController : MonoBehaviour
             if (Time.realtimeSinceStartup - timefromState > timeState && StateMob == StateMobs.Idle)
             {
                 StateMob = StateMobs.Walk;
-                rightMove = !rightMove;
-                transform.Rotate(new Vector3(0, 180, 0));
+                Rotate();
             }
         }
     }
@@ -362,5 +366,27 @@ public class MobsController : MonoBehaviour
             Health -= damage;
         }
     }
-
+    public void Rotate() {
+        rightMove = !rightMove;
+        spriteRenderer.flipX = !spriteRenderer.flipX;
+        ATackRegion.transform.localPosition = new Vector2(
+                -ATackRegion.transform.localPosition.x,
+                ATackRegion.transform.localPosition.y);
+        ATackRegion.transform.Rotate(0, 180, 0);
+        eyeRaycast.transform.localPosition = new Vector2(
+                -eyeRaycast.transform.localPosition.x,
+                eyeRaycast.transform.localPosition.y);
+        BackeyeRaycast.transform.localPosition = new Vector2(
+                -BackeyeRaycast.transform.localPosition.x,
+                BackeyeRaycast.transform.localPosition.y);
+        FwdBttmBoolGO.transform.localPosition = new Vector2(
+                -FwdBttmBoolGO.transform.localPosition.x,
+                FwdBttmBoolGO.transform.localPosition.y);
+        BttmBoolGO.transform.localPosition = new Vector2(
+                -BttmBoolGO.transform.localPosition.x,
+                BttmBoolGO.transform.localPosition.y);
+        FwdWallBoolGO.transform.localPosition = new Vector2(
+                -FwdWallBoolGO.transform.localPosition.x,
+                FwdWallBoolGO.transform.localPosition.y);
+    }
 }

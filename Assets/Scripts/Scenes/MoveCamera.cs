@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MoveCamera : MonoBehaviour
 {
@@ -15,9 +13,13 @@ public class MoveCamera : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        float tm = Mathf.Abs(_GOPlayer.transform.position.y - _Camera.transform.position.y)/10;
+        float ty;
+        if (tm < 0.1f) ty = 0.1f;
+        else ty = tm + 0.07f;
         if (_GOPlayer.transform.position.x - _deltaX > _Camera.transform.position.x)
         {
-            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_GOPlayer.transform.position.x - _deltaX, _Camera.transform.position.y,-10), t);
+            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_GOPlayer.transform.position.x - _deltaX, _Camera.transform.position.y, -10), t);
         }
         if (_GOPlayer.transform.position.x + _deltaX < _Camera.transform.position.x)
         {
@@ -25,11 +27,11 @@ public class MoveCamera : MonoBehaviour
         }
         if (_GOPlayer.transform.position.y - _deltayUP > _Camera.transform.position.y)
         {
-            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_Camera.transform.position.x, _GOPlayer.transform.position.y - _deltayUP,-10), t);
+            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_Camera.transform.position.x, _GOPlayer.transform.position.y - _deltayUP,-10), ty);
         }
         if (_GOPlayer.transform.position.y + _deltayDown < _Camera.transform.position.y)
         {
-            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_Camera.transform.position.x, _GOPlayer.transform.position.y + _deltayDown,-10), t); 
+            _Camera.transform.position = Vector3.Lerp(this.transform.position, new Vector3(_Camera.transform.position.x, _GOPlayer.transform.position.y + _deltayDown,-10), ty); 
         }
     }
 }

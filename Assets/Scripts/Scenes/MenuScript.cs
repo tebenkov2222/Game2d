@@ -2,14 +2,24 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Android;
-
+using System.Collections;
 public class MenuScript : MonoBehaviour
 {
-    public GameObject StartCanvas, UnderCanvas, KeyCodeCanvas;
+    public GameObject StartCanvas, UnderCanvas, KeyCodeCanvas, MenuSettings;
     public Text txt;
+    public void MenuSettigsCheck()
+    {
+        MenuSettings.SetActive(!MenuSettings.activeSelf);
+    }
     public void LoadScene(string str)
     {
+        StartCoroutine(TeleportCoroutine(str));
+    }
+    private  IEnumerator TeleportCoroutine(string str)
+    {
+        yield return new WaitForSeconds(0.2f);
         SceneManager.LoadScene(str);
+        StopAllCoroutines();
     }
     public void Quit()
     {
@@ -31,6 +41,10 @@ public class MenuScript : MonoBehaviour
         CheckPermision(Permission.ExternalStorageWrite);
         CheckPermision(Permission.Camera);
         txt.text =  Application.version;
+        if (GameObject.Find("Player"))
+        {
+            Destroy(GameObject.Find("Player"));
+        }
     }
     void CheckPermision(string permission)
     {

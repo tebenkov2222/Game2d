@@ -38,6 +38,7 @@ public class MovePlayer : MonoBehaviour
     private SpriteRenderer sprite;
     #endregion
     [SerializeField] private GameObject Arrow, SpawnerArrow;
+    [SerializeField] private LayerMask layerMask;
     [SerializeField]
     private float
         velocityJumpDown = 8f;
@@ -59,7 +60,8 @@ public class MovePlayer : MonoBehaviour
         _speedElevatorUp = 4,
         _speedElevatorDown = 8,
         Force = 2,
-        _maxJump = 1060;
+        _maxJump = 1060,
+        atackradius;
     private float
         NormalGravityScale = 7,
         _speedRun = 1100,
@@ -439,10 +441,6 @@ public class MovePlayer : MonoBehaviour
     void AtackAnimationArrow()
     {
         State = AnimState.AtackBowSit;
-        /*int n = Random.Range(0, 3);
-        if (n == 0) State = AnimState.AtackBow;
-        if (n == 1) State = AnimState.AtackBowSit;
-        if (n == 2) State = AnimState.AtackBowJumped;*/
     }
     void AtackAnimationSword()
     {
@@ -508,7 +506,6 @@ public class MovePlayer : MonoBehaviour
 
     void GetData()
     {
-        print(TagWeapons);
         TagWeapons = Controller.GetTagWeapons();
         List<bool> Databool = Controller.GetAllDatabool();
         _AtackBool = Databool[0];
@@ -559,14 +556,22 @@ public class MovePlayer : MonoBehaviour
         List<Collider2D> ColAttack = Controller.CheckAtackRegion();
         for (int i = 0; i < ColAttack.Count; ++i)
         {
-            if (ColAttack[i].GetComponent<TeleportRoomScript>()) ColAttack[i].GetComponent<TeleportRoomScript>().Teleported();
-            if (ColAttack[i].GetComponent<Fire>()) ColAttack[i].GetComponent<Fire>().Destroy();
-            if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
+            RaycastHit2D hit1 = Physics2D.Raycast(this.transform.position, ColAttack[i].transform.position - this.transform.position, atackradius, layerMask);
+            if (hit1.collider != null)
             {
-                if(ColAttack[i].gameObject.GetComponent<MobsController>()) ColAttack[i].gameObject.GetComponent<MobsController>().GetDamage(Damage);
-                ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(ColAttack[i].gameObject.transform.position.x - this.transform.position.x, 1f) * forceDamage);
+                if (hit1.collider.gameObject == ColAttack[i].gameObject)
+                {
+                    if (ColAttack[i].GetComponent<TeleportRoomScript>()) ColAttack[i].GetComponent<TeleportRoomScript>().Teleported();
+                    if (ColAttack[i].GetComponent<Fire>()) ColAttack[i].GetComponent<Fire>().Destroy();
+                    if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
+                    {
+                        if (ColAttack[i].gameObject.GetComponent<MobsController>()) ColAttack[i].gameObject.GetComponent<MobsController>().GetDamage(Damage);
+                        ColAttack[i].gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(ColAttack[i].gameObject.transform.position.x - this.transform.position.x, 1f) * forceDamage);
+                    }
+                }
             }
         }
+
     }
     private void MoveForward(float speed, bool rightMove)
     {

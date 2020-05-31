@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ToolBar : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ToolBar : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     public SToolBar[] tools;
     private float StartTouch, EndTouch;
     public float Drag = 2f;
     private bool Active = false;
-    private int Capacity = 0;
+    private int Capacity = 0, MaxAxtive = 0;
     private PlayerController mp;
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -28,6 +28,10 @@ public class ToolBar : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     }
     private void Start()
     {
+        for (int i = 0; i < tools.Length; i++)
+        {
+            if (tools[i].GetTag != "Lock" && tools[i].GetTag != "Plus") MaxAxtive++;
+        }
         mp = GameObject.Find("Player").GetComponent<PlayerController>();
         ChangeSprite();
     }
@@ -60,5 +64,11 @@ public class ToolBar : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 ChangeSprite();
             }
         }
+    }
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (Capacity < MaxAxtive-1) Capacity++; else Capacity = 0;
+        mp.TagWeapons = tools[Capacity].GetTag;
+        ChangeSprite();
     }
 }

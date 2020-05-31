@@ -20741,6 +20741,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1042740200}
     m_Modifications:
+    - target: {fileID: 1264104011609368909, guid: b507f429d61163642878955f276738ad,
+        type: 3}
+      propertyPath: m_AlphaBlendOnOverlap
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264104011609368909, guid: b507f429d61163642878955f276738ad,
+        type: 3}
+      propertyPath: m_UseNormalMap
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5685246241074513105, guid: b507f429d61163642878955f276738ad,
         type: 3}
       propertyPath: m_Name

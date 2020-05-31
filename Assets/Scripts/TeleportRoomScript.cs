@@ -37,27 +37,20 @@ public class TeleportRoomScript : MonoBehaviour
         {
             Player = GameObject.Find("Player");
             TeleportSettings = GameObject.Find("TeleportRoomSettings");
+
+            Player.GetComponent<PlayerController>()._ActivePlayer = false;
+            Player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            Player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
             if (Levels)
             {
-                if (LevelName == "Menu")
-                {
-                    DestroyObject(Player);
-                }
-                else
-                {
-                    DontDestroyOnLoad(Player);
-                }
+                DontDestroyOnLoad(Player);
                 Player.transform.position = PlayerEmpty.transform.position;
-                Player.GetComponent<PlayerController>()._ActivePlayer = false;
-                Player.GetComponent<Rigidbody2D>().isKinematic = true;
                 this.GetComponent<Animator>().Play("TeleportLevel", 0);
 
             }
             else
             {
                 Player.transform.position = PlayerEmpty.transform.position;
-                Player.GetComponent<PlayerController>()._ActivePlayer = false;
-                Player.GetComponent<Rigidbody2D>().isKinematic = true;
                 this.GetComponent<Animator>().Play("TeleportRoom", 0);
             }
         }

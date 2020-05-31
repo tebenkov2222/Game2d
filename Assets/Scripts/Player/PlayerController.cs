@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public Image Load;
     public Text text;
     public string TagWeapons;
+    public bool _ActivePlayer = true;
     [HideInInspector]
     public bool
     #region UI Buttons
@@ -29,7 +30,6 @@ public class PlayerController : MonoBehaviour
         _JumpSide = false,
     #endregion
     #region StatesPlayer
-        _ActivePlayer = true,
         _AtackMob = false,
         _Damage = false,
         _DamagePlayer = false,
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (Desctop)
+        if (Desctop && _ActivePlayer)
         {
             if (Input.GetKey(KeyCode.D))
             {
@@ -141,39 +141,49 @@ public class PlayerController : MonoBehaviour
     #region UI
     public void Atack()
     {
-        _AtackBool = true;
+        if (_ActivePlayer) { _AtackBool = true; }
+        else { _AtackBool = false; }
     }
     public void Jump(bool State)
     {
-        _JumpBool = State;
+        if (_ActivePlayer) { _JumpBool = State; }
+        else { _JumpBool = false; }
     }
     public void Down(bool State)
     {
-        if (!Desctop) _DownBool = State;
+        if (_ActivePlayer) {if (!Desctop) _DownBool = State;}
+        else { _DownBool = false; }
     }
     public void Up(bool State)
     {
-        if (!Desctop) _UpBool = State;
+        if (_ActivePlayer) { if (!Desctop) _UpBool = State; }
+        else { _UpBool = false; }
     }
     public void Left(bool State)
     {
-        if (!Desctop) _LeftBool = State;
+        if (_ActivePlayer) { if (!Desctop) _LeftBool = State; }
+        else { _LeftBool = false; }
     }
     public void Right(bool State)
     {
-        if (!Desctop) _RightBool = State;
+        if (_ActivePlayer) { if (!Desctop) _RightBool = State; }
+        else { _RightBool = false; }
     }
     public void Run()
     {
-        if (procent == 1000)
-        {
-            _Runnerbool = true;
-            procent = 0;
+        if (_ActivePlayer) { 
+            if (procent == 1000)
+            {
+                _Runnerbool = true;
+                procent = 0;
+            }
+            else { _Runnerbool = false; }
         }
     }
     public void SitDown()
     {
-        _SitBool = !_SitBool;
+        if (_ActivePlayer) { _SitBool = !_SitBool; }
+        else { _SitBool = false; }
     }
 
     public bool SetRun()

@@ -507,6 +507,7 @@ MonoBehaviour:
   Load: {fileID: 0}
   text: {fileID: 0}
   TagWeapons: 
+  _ActivePlayer: 1
   _AtackBool: 0
   _JumpBool: 0
   _LeftBool: 0
@@ -521,7 +522,6 @@ MonoBehaviour:
   _RightBlc: 0
   _LeftBlc: 0
   _JumpSide: 0
-  _ActivePlayer: 1
   _AtackMob: 0
   _Damage: 0
   _DamagePlayer: 0
@@ -550,6 +550,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e936f61d06c32a0439109ddf0ae1e07c, type: 2}
   Arrow: {fileID: 2245565820398365107, guid: decfcb426a5791649831bced9145aa2c, type: 3}
   SpawnerArrow: {fileID: 4753291560627300682}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 14336
   velocityJumpDown: 8
   VectorJumpVall: {x: 0, y: 1}
   AtackCol: {x: 0.5, y: 1}
@@ -568,6 +571,7 @@ MonoBehaviour:
   _speedElevatorDown: 8
   Force: 3
   _maxJump: 1600
+  atackradius: 2
   _AtackBool: 0
   _JumpBool: 0
   _LeftBool: 0

@@ -29,16 +29,15 @@ public class CanvasSettingsPlayer : MonoBehaviour
         LoadAllSettingsObject();
         Player = GameObject.Find("Player");
         mp = Player.GetComponent<PlayerController>();
-       mp.text = this.GetComponentInChildren<Text>();
+        mp.text = this.GetComponentInChildren<Text>();
         Player.GetComponent<SpriteRenderer>().enabled = true;
-       mp._ActivePlayer = true;
-        Player.GetComponent<Rigidbody2D>().isKinematic = false;
-       mp.Load = Load;
+        mp._ActivePlayer = true;
+        Player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        mp.Load = Load;
     }
 
     private void SetHealth()
     {
-        print((float)mp.ArrowNow / mp.ArrowMax);
         endurance.fillAmount = (float) mp.ArrowNow / mp.ArrowMax;
         Health.fillAmount = mp.Health / mp.HealthMax;
     }

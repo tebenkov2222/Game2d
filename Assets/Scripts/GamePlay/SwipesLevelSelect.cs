@@ -16,6 +16,8 @@ public class SwipesLevelSelect : MonoBehaviour
     public GameObject[] Players;
     public GameObject Snap, Camera;
     public GameObject SelectedWindow, PrevWindow, UpdateWindow;
+    public AudioClip backClip;
+    public AudioSource audioSource;
     int value;
     bool isSelect = false,
         isUpdate = false;
@@ -57,6 +59,7 @@ public class SwipesLevelSelect : MonoBehaviour
     }
     public void Back()
     {
+        audioSource.PlayOneShot(backClip);
         if (isSelect)
         {
             if (isUpdate)
