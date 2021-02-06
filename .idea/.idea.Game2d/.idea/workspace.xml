@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c9f3d84d-a6b6-4a03-b32d-2d964c116c53" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player/PlayerController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/GamePlay/SodesPlayer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerAnimationWoman.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/TeleportRoomScript.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/LiveFire.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/TeleportRoomSettingsScript.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player/PlayerWomanApi/PWomanApi.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Mine.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/GamePlay/MovePlayer.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Assets/Scripts/Mine.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/GamePlay/SodesPlayer.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/GamePlay/MovePlayer.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/LiveFire.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/TeleportRoomSettingsScript.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Player/PlayerController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/TeleportRoomScript.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1ny8C5UMOjNGe4pShmwNPnnPd35" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34980392" />
+    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.30039215" />
+    <property name="Discover.Launch.Via.Unity" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="12780">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" value="12780" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c9f3d84d-a6b6-4a03-b32d-2d964c116c53" name="Default Changelist" comment="" />
+      <created>1612350848983</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1612350848983</updated>
+      <workItem from="1612350929323" duration="17556000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1306" height="251" key="GridCell.Tab.0.bottom" timestamp="1612600965142">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="251" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1612600965142" />
+    <state width="1306" height="251" key="GridCell.Tab.0.center" timestamp="1612600965142">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="251" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1612600965142" />
+    <state width="1306" height="251" key="GridCell.Tab.0.left" timestamp="1612600965115">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="251" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1612600965115" />
+    <state width="1306" height="251" key="GridCell.Tab.0.right" timestamp="1612600965142">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="251" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1612600965142" />
+    <state width="1306" height="251" key="GridCell.Tab.1.bottom" timestamp="1612601158569">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="251" key="GridCell.Tab.1.bottom/0.0.1366.738@0.0.1366.738" timestamp="1612601158569" />
+    <state width="1306" height="251" key="GridCell.Tab.1.center" timestamp="1612601158569">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="251" key="GridCell.Tab.1.center/0.0.1366.738@0.0.1366.738" timestamp="1612601158569" />
+    <state width="1306" height="251" key="GridCell.Tab.1.left" timestamp="1612601158569">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="251" key="GridCell.Tab.1.left/0.0.1366.738@0.0.1366.738" timestamp="1612601158569" />
+    <state width="1306" height="251" key="GridCell.Tab.1.right" timestamp="1612601158569">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="251" key="GridCell.Tab.1.right/0.0.1366.738@0.0.1366.738" timestamp="1612601158569" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/TeleportRoomScript.cs</url>
+          <line>88</line>
+          <properties documentPath="$PROJECT_DIR$/Assets/Scripts/TeleportRoomScript.cs" initialLine="88">
+            <startOffsets>
+              <option value="2794" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2813" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
