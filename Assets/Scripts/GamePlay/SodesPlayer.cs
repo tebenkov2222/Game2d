@@ -6,7 +6,7 @@ public class SodesPlayer : MonoBehaviour
 {
     public LayerMask lm;
     public int mode = 1;
-    public GameObject player;
+    public PlayerController PlayerController;
     private bool StopBlockCheck()
     {
         List<Collider2D> arr = new List<Collider2D>(Physics2D.OverlapBoxAll(this.transform.position, this.transform.localScale, 0, lm));
@@ -24,13 +24,16 @@ public class SodesPlayer : MonoBehaviour
     }
     private void Update()
     {
-        if (mode == 1) player.GetComponent<PlayerController>()._DownSide = SBox();
-        if (mode == 2) player.GetComponent<PlayerController>()._RightSide = SBox();
-        if (mode == 3) player.GetComponent<PlayerController>()._LeftSide = SBox();
-        if (mode == 4) player.GetComponent<PlayerController>()._JumpSide = SBox();
+        if (mode == 1) PlayerController._DownSide = SBox();
+        if (mode == 2) PlayerController._RightSide = SBox();
+        if (mode == 3) PlayerController._LeftSide = SBox();
+        if (mode == 4) PlayerController._JumpSide = SBox();
+        if (mode == 5) PlayerController._LeftSideJump = SBox();
+        if (mode == 6) PlayerController._RightSideJump = SBox();
+
         //StopBlock
-        if (mode == 2) player.GetComponent<PlayerController>()._RightBlc = StopBlockCheck();
-        if (mode == 3) player.GetComponent<PlayerController>()._LeftBlc = StopBlockCheck();
+        if (mode == 2) PlayerController._RightBlc = StopBlockCheck();
+        if (mode == 3) PlayerController._LeftBlc = StopBlockCheck();
 
     }
 }

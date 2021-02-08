@@ -47,6 +47,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -96,13 +97,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LightType: 1
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.271
+  m_FalloffIntensity: 0.323
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.25
   m_LightVolumeOpacity: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 0000000085aa9c4f
   m_LightCookieSprite: {fileID: 0}
-  m_UseNormalMap: 0
+  m_UseNormalMap: 1
   m_LightOrder: 0
   m_AlphaBlendOnOverlap: 0
   m_ShadowIntensity: 0
@@ -111,23 +112,15 @@ MonoBehaviour:
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
   m_PointLightOuterRadius: 1
-  m_PointLightDistance: 3
+  m_PointLightDistance: 2.43
   m_PointLightQuality: 1
-  m_ShapeLightParametricSides: 15
+  m_ShapeLightParametricSides: 14
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
-  m_ShapeLightFalloffSize: 1.5
+  m_ShapeLightFalloffSize: 2.16
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
-  - {x: -0.51504135, y: -0.51504195, z: 0}
-  - {x: 0.50000095, y: -0.4849589, z: 0}
-  - {x: 0.5537424, y: -0.28691363, z: 0}
-  - {x: 0.56779575, y: 0.06580889, z: 0}
-  - {x: 0.5537424, y: 0.3483727, z: 0}
-  - {x: 0.40966606, y: 0.546849, z: 0}
-  - {x: 0.008612633, y: 0.5878327, z: 0}
-  - {x: -0.26182842, y: 0.57158136, z: 0}
-  - {x: -0.49014091, y: 0.4315784, z: 0}
-  - {x: -0.5708866, y: 0.17667377, z: 0}
-  - {x: -0.58798695, y: -0.13968945, z: 0}
-  - {x: -0.58805656, y: -0.32983816, z: 0}
+  - {x: -0.6149626, y: -0.5383209, z: 0}
+  - {x: 0.6245427, y: -0.52874064, z: 0}
+  - {x: 0.54128504, y: 0.4171661, z: 0}
+  - {x: -0.55696344, y: 0.41847217, z: 0}

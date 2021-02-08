@@ -1,10 +1,16 @@
-﻿using UnityEngine.UI;
+﻿using System;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+    public TrailRenderer _trail;
     public LayerMask lm;
     public GameObject AtackRegion, AtackRegionRunner, ElevatorRegion;
+    public Rigidbody2D RB;
     public Image Load;
     public Text text;
     public string TagWeapons;
@@ -25,6 +31,8 @@ public class PlayerController : MonoBehaviour
         _DownSide = false,
         _RightSide = false,
         _LeftSide = false,
+        _RightSideJump = false,
+        _LeftSideJump = false,
         _RightBlc = false,
         _LeftBlc = false,
         _JumpSide = false,
@@ -43,6 +51,13 @@ public class PlayerController : MonoBehaviour
         timeLoad = 2;
     public int ArrowNow,
         ArrowMax= 5;
+
+    private void Awake()
+    {
+        if(Instance != null) Destroy(Instance.gameObject);
+        Instance = this;
+    }
+
     private void Start()
     {
         Health = HealthMax;
@@ -65,12 +80,12 @@ public class PlayerController : MonoBehaviour
     }
     public bool TrailEnabled()
     {
-        if (AtackRegionRunner.GetComponent<TrailRenderer>().enabled) return true;
+        if (_trail.enabled) return true;
         return false;
     }
     public void TrailRunner(bool Set)
     {
-        AtackRegionRunner.GetComponent<TrailRenderer>().enabled = Set;
+        _trail.enabled = Set;
     }
     public List<Collider2D> CheckRunerAtackRegion() { return new List<Collider2D>(Physics2D.OverlapPointAll(AtackRegionRunner.transform.position, lm)); }
     public List<Collider2D> CheckAtackRegion(){return new List<Collider2D>(Physics2D.OverlapBoxAll(AtackRegion.transform.position, AtackRegion.transform.localScale, 0, lm));}
@@ -134,6 +149,31 @@ public class PlayerController : MonoBehaviour
                 _UpBool = true;
             }
             else _UpBool = false;
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _JumpBool = true;
+            }
+            else _JumpBool = false;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                _SitBool = !_SitBool;
+            }
+            if (Input.GetKey(KeyCode.E))
+            {
+                if (procent == 1000)
+                {
+                    _Runnerbool = true;
+                    procent = 0;
+                }
+                else
+                {
+                    _Runnerbool = false;
+                }
+            }
+            else
+            {
+                _Runnerbool = false;
+            }
         }
         _Movd = checkMove();
         LoadRun();
@@ -146,7 +186,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump(bool State)
     {
-        if (_ActivePlayer) { _JumpBool = State; }
+        if (_ActivePlayer) {if (!Desctop) _JumpBool = State; }
         else { _JumpBool = false; }
     }
     public void Down(bool State)
@@ -171,18 +211,24 @@ public class PlayerController : MonoBehaviour
     }
     public void Run()
     {
-        if (_ActivePlayer) { 
-            if (procent == 1000)
+        if (_ActivePlayer) {
+            if (!Desctop)
             {
-                _Runnerbool = true;
-                procent = 0;
+                if (procent == 1000)
+                {
+                    _Runnerbool = true;
+                    procent = 0;
+                }
+                else
+                {
+                    _Runnerbool = false;
+                }
             }
-            else { _Runnerbool = false; }
         }
     }
     public void SitDown()
     {
-        if (_ActivePlayer) { _SitBool = !_SitBool; }
+        if (_ActivePlayer) { if(!Desctop) _SitBool = !_SitBool; }
         else { _SitBool = false; }
     }
 
@@ -284,7 +330,9 @@ public class PlayerController : MonoBehaviour
             _JumpSide,
             SetAtackMobs(),
             Life(),
-            ElevatorTest()
+            ElevatorTest(),
+            _RightSideJump,
+            _LeftSideJump
         };
     }
 

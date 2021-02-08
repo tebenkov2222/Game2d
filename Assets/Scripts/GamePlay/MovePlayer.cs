@@ -45,7 +45,10 @@ public class MovePlayer : MonoBehaviour
     public Vector2
         VectorJumpVall
         , AtackCol = new Vector2(0.5f, 1f);
+
     public float
+        timeStopJumpVall = 0.5f,
+        timeStoped = 0,
         ForceArrow = 10,
         forceDamage = 200,
         timeLoad = 2,
@@ -61,6 +64,7 @@ public class MovePlayer : MonoBehaviour
         _speedElevatorDown = 8,
         Force = 2,
         _maxJump = 1060,
+        _maxJumpVall = 1500,
         atackradius;
     private float
         NormalGravityScale = 7,
@@ -71,8 +75,9 @@ public class MovePlayer : MonoBehaviour
         _timeLastMove = 0;
     private int
         _Runnerbool = 0;
-    [HideInInspector]
-    public bool
+
+    [HideInInspector] public bool
+        isStoped = false,
     #region UI Buttons
         _AtackBool = false,
         _JumpBool = false,
@@ -86,6 +91,8 @@ public class MovePlayer : MonoBehaviour
         _DownSide = false,
         _RightSide = false,
         _LeftSide = false,
+        _RightSideJump = false,
+        _LeftSideJump = false,
         _RightBlc = false,
         _LeftBlc = false,
         _JumpSide = false,
@@ -406,7 +413,7 @@ public class MovePlayer : MonoBehaviour
     }
     private void JumpVall()
     {
-        if (_JumpBool && (_RightSide || _RightBlc || _LeftBlc) && _LeftBool && (Time.time - timeUnderJump > 0.2f))
+        if (_JumpBool && (_RightSideJump || _RightBlc || _LeftBlc) && _LeftBool && (Time.time - timeUnderJump > 0.1f))
         {
             timeUnderJump = Time.time;
             State = AnimState.Jump;
@@ -416,7 +423,7 @@ public class MovePlayer : MonoBehaviour
             rb.isKinematic = false;
             rb.AddForce(new Vector2(-VectorJumpVall.x, VectorJumpVall.y) * _maxJump);
         }
-        if (_JumpBool && (_LeftSide || _LeftBlc || _RightBlc) && _RightBool && (Time.time - timeUnderJump > 0.2f))
+        if (_JumpBool && (_LeftSideJump || _LeftBlc || _RightBlc) && _RightBool && (Time.time - timeUnderJump > 0.1f))
         {
             timeUnderJump = Time.time;
             State = AnimState.Jump;
@@ -451,8 +458,32 @@ public class MovePlayer : MonoBehaviour
     }
     private void CheckStateJump()
     {
-        if (rb.velocity.y < velocityJumpDown) StateJump = AnimJump.JumpDown;
-        else StateJump = AnimJump.JumpUp;
+        if (rb.velocity.y < 1f && _RightSideJump || _LeftSideJump && !_DownSide && _JumpBool)
+        {
+            if (!isStoped)
+            {
+                isStoped = true;
+                //rb.bodyType = RigidbodyType2D.Kinematic;
+                rb.isKinematic = true;
+                rb.velocity = Vector2.zero;
+                timeStoped = Time.time;
+            }
+
+            if (Time.time - timeStoped > timeStopJumpVall)
+            {
+                rb.isKinematic = false;
+            }
+        }
+        else
+        {
+            if (isStoped)
+            {
+                rb.isKinematic = false;
+            }
+            isStoped = false;
+            if (rb.velocity.y < velocityJumpDown) StateJump = AnimJump.JumpDown;
+            else StateJump = AnimJump.JumpUp;
+        }
     }
     #region Enum
     public AnimState State
@@ -536,6 +567,8 @@ public class MovePlayer : MonoBehaviour
         }
         _Life = Databool[16];
         _elevator = Databool[17];
+        _RightSideJump = Databool[18];
+        _LeftSideJump = Databool[19];
     }
     #endregion
     //атаковать
@@ -559,9 +592,9 @@ public class MovePlayer : MonoBehaviour
             RaycastHit2D hit1 = Physics2D.Raycast(this.transform.position, ColAttack[i].transform.position - this.transform.position, atackradius, layerMask);
             if (hit1.collider != null)
             {
+                if (ColAttack[i].GetComponent<TeleportRoomScript>()) ColAttack[i].GetComponent<TeleportRoomScript>().Teleported();
                 if (hit1.collider.gameObject == ColAttack[i].gameObject)
                 {
-                    if (ColAttack[i].GetComponent<TeleportRoomScript>()) ColAttack[i].GetComponent<TeleportRoomScript>().Teleported();
                     if (ColAttack[i].GetComponent<Fire>()) ColAttack[i].GetComponent<Fire>().Destroy();
                     if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
                     {

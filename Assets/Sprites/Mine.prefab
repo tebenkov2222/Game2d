@@ -50,6 +50,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -116,6 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4d5ee2849960e84fa34ec23f2576300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Exposion: {fileID: 6098340508071560456}
+  _animator: {fileID: 1562508649036747319}
+  _light2D: {fileID: 988294056}
   speed: 0.5
   damage: 5
   PointBoom: {fileID: 0}

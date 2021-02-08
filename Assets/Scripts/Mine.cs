@@ -5,6 +5,9 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class Mine : MonoBehaviour
 {
+    public Exposion Exposion;
+    public Animator _animator;
+    public Light2D _light2D;
     public float speed = 0.5f, damage = 5;
     public GameObject PointBoom;
     private bool Damage = false;
@@ -20,11 +23,11 @@ public class Mine : MonoBehaviour
         }
         if (Damage)
         {
-            this.GetComponent<Animator>().Play("MineAtack"); 
-            if (this.GetComponent<Light2D>().intensity < 5)
+            _animator.Play("MineAtack"); 
+            if (_light2D.intensity < 5)
             {
-                this.GetComponent<Light2D>().enabled = true;
-                this.GetComponent<Light2D>().intensity += speed * Time.deltaTime;
+                _light2D.enabled = true;
+                _light2D.intensity += speed * Time.deltaTime;
             }
         }
     }
@@ -35,15 +38,15 @@ public class Mine : MonoBehaviour
         {
             if (ColAttack[i].gameObject.name == "Player")
             {
-                ColAttack[i].gameObject.GetComponent<PlayerController>().GetDamage(damage);
+                PlayerController.Instance.GetDamage(damage);
             }
         }
-        this.GetComponentInChildren<Exposion>().Boom();
-        this.GetComponent<Light2D>().intensity = 0;
+        Exposion.Boom();
+        _light2D.intensity = 0;
     }
     public void endAnim()
     {
         Destroy(this.gameObject);
-        this.GetComponent<Light2D>().enabled = false;
+        _light2D.enabled = false;
     }
 }

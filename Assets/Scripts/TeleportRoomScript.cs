@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,7 +7,9 @@ using UnityEngine.SceneManagement;
 public class TeleportRoomScript : MonoBehaviour
 {
     public List<GameObject> Mobs;
+    public Animator Animator;
     public GameObject Player, PlayerEmpty, TeleportSettings;
+    public TeleportRoomSettingsScript TeleportRoomSettingsScript;
     public string LevelName;
     public bool Levels = false;
     private int countMobs = 0;
@@ -27,6 +30,12 @@ public class TeleportRoomScript : MonoBehaviour
         }
         countMobs = Mobs.Count;
     }
+
+    private void Start()
+    {
+        TeleportRoomSettingsScript = TeleportRoomSettingsScript.Instance;
+    }
+
     private void Update()
     {
         CheckAllMobs();
@@ -35,23 +44,21 @@ public class TeleportRoomScript : MonoBehaviour
     {
         if (CheckAllMobs())
         {
-            Player = GameObject.Find("Player");
-            TeleportSettings = GameObject.Find("TeleportRoomSettings");
-
-            Player.GetComponent<PlayerController>()._ActivePlayer = false;
-            Player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            Player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            PlayerController.Instance._ActivePlayer = false;
+            PlayerController.Instance.RB.velocity = Vector2.zero;
+            PlayerController.Instance.RB.bodyType = RigidbodyType2D.Kinematic;
+            Player = PlayerController.Instance.gameObject;
             if (Levels)
             {
                 DontDestroyOnLoad(Player);
                 Player.transform.position = PlayerEmpty.transform.position;
-                this.GetComponent<Animator>().Play("TeleportLevel", 0);
+                Animator.Play("TeleportLevel", 0);
 
             }
             else
             {
                 Player.transform.position = PlayerEmpty.transform.position;
-                this.GetComponent<Animator>().Play("TeleportRoom", 0);
+                Animator.Play("TeleportRoom", 0);
             }
         }
     }
@@ -62,7 +69,7 @@ public class TeleportRoomScript : MonoBehaviour
     public void TeleportEnd()
     {
         if (Levels) SceneManager.LoadScene(LevelName);
-        else TeleportSettings.GetComponent<TeleportRoomSettingsScript>().NextRoom(); 
+        else TeleportRoomSettingsScript.NextRoom(); 
     }
     private bool CheckAllMobs()
     {

@@ -27,9 +27,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710518976054049227}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -17.872221, y: -20.095692, z: 38.514698}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 1}
   m_Children:
   - {fileID: 8982758798201973512}
   m_Father: {fileID: 0}
@@ -50,6 +50,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -116,10 +117,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 136c9ba2672080b4bb502adc5a93bc83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Mobs: []
+  Animator: {fileID: 710518976054049224}
   Player: {fileID: 0}
   PlayerEmpty: {fileID: 4658897120476899196}
   TeleportSettings: {fileID: 0}
-  LevelName: 
+  TeleportRoomSettingsScript: {fileID: 0}
+  LevelName: Finish
   Levels: 1
 --- !u!61 &762869754311644459
 BoxCollider2D:

@@ -23,12 +23,16 @@ public class SwipesLevelSelect : MonoBehaviour
         isUpdate = false;
     public void Selected()
     {
-        isSelect = true;
-        PrevWindow.SetActive(false);
-        SelectedWindow.SetActive(true);
-         value = Snap.GetComponent<HorizontalScrollSnap>().GetPage();
-        Snap.GetComponent<HorizontalScrollSnap>().enabled = false;
-        Snap.GetComponent<ScrollRect>().enabled = false;
+        value = Snap.GetComponent<HorizontalScrollSnap>().GetPage();value = Snap.GetComponent<HorizontalScrollSnap>().GetPage();
+        if (value != 1)
+        {
+            isSelect = true;
+            PrevWindow.SetActive(false);
+            SelectedWindow.SetActive(true);
+
+            Snap.GetComponent<HorizontalScrollSnap>().enabled = false;
+            Snap.GetComponent<ScrollRect>().enabled = false;
+        }
     }
     public void PlayerUpdate()
     {

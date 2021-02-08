@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class TeleportRoomSettingsScript : MonoBehaviour
 {
+    public static TeleportRoomSettingsScript Instance;
     public GameObject[] Rooms;
     public GameObject Player, UI;
     private int ThisRoom = 0;
     private void Awake()
     {
+        if (Instance != null) Destroy(Instance.gameObject);
+        Instance = this;
         UI = GameObject.Find("Main Camera");
         Player = GameObject.Find("Player");
         Player.transform.position = GameObject.Find("Start").gameObject.transform.position;
