@@ -16,7 +16,7 @@ public class TeleportRoomScript : MonoBehaviour
 
     private void Awake()
     {
-        GameObject[] vr = GameObject.FindGameObjectsWithTag("Sceleton");
+        /*GameObject[] vr = GameObject.FindGameObjectsWithTag("Sceleton");
         for (int i = 0; i < vr.Length; i++)
         {
             if (vr[i].gameObject.GetComponent<MagScript>() ||
@@ -28,7 +28,7 @@ public class TeleportRoomScript : MonoBehaviour
             if (vr[i].gameObject.GetComponent<MagScript>() ||
             vr[i].gameObject.GetComponent<SceletonAPI>()) Mobs.Add(vr[i]);
         }
-        countMobs = Mobs.Count;
+        countMobs = Mobs.Count;*/
     }
 
     private void Start()
@@ -73,6 +73,7 @@ public class TeleportRoomScript : MonoBehaviour
     }
     private bool CheckAllMobs()
     {
+        return true;
         Mobs.Clear();
         GameObject[] vr = GameObject.FindGameObjectsWithTag("Sceleton");
         for (int i = 0; i < vr.Length; i++)

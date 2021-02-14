@@ -595,7 +595,11 @@ public class MovePlayer : MonoBehaviour
                 if (ColAttack[i].GetComponent<TeleportRoomScript>()) ColAttack[i].GetComponent<TeleportRoomScript>().Teleported();
                 if (hit1.collider.gameObject == ColAttack[i].gameObject)
                 {
-                    if (ColAttack[i].GetComponent<Fire>()) ColAttack[i].GetComponent<Fire>().Destroy();
+                    if (ColAttack[i].GetComponent<Fire>())
+                    {
+                        ColAttack[i].GetComponent<Fire>().Destroy();
+                        PlayerStat.Instance.CountFireBallRepulsedUp();
+                    }
                     if (ColAttack[i].gameObject.layer == 11 || ColAttack[i].gameObject.layer == 12)
                     {
                         if (ColAttack[i].gameObject.GetComponent<MobsController>()) ColAttack[i].gameObject.GetComponent<MobsController>().GetDamage(Damage);

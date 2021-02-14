@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Projects\Game2d" t="IncludeRecursive">
+    <e p="C:\Users\Владимир\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Владимир\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_Game2d.1580113177.00" t="ExcludeRecursive" />
+    <e p="D:\Projects\GitHub\Game2d" t="IncludeRecursive">
       <e p="Assembly-CSharp-Editor-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
@@ -567,6 +569,7 @@
           <e p="EducationScript.cs" t="Include" />
           <e p="EmptyCheck.cs" t="Include" />
           <e p="Exposion.cs" t="Include" />
+          <e p="FinishStat.cs" t="Include" />
           <e p="GamePlay" t="Include">
             <e p="Fire.cs" t="Include" />
             <e p="KeyCodeScripts.cs" t="Include" />
@@ -589,6 +592,7 @@
             </e>
           </e>
           <e p="PlayerAnimationWoman.cs" t="Include" />
+          <e p="PlayerStat.cs" t="Include" />
           <e p="Scenes" t="Include">
             <e p="Audio_Settings.cs" t="Include" />
             <e p="DevelopsMenu.cs" t="Include" />
@@ -618,7 +622,5 @@
       <e p="Packages" t="ExcludeRecursive" />
       <e p="Temp\Bin" t="ExcludeRecursive" />
     </e>
-    <e p="C:\Users\Владимир\AppData\Local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Владимир\AppData\Local\JetBrains\Rider2020.1\resharper-host\Local\Transient\ReSharperHost\v201\SolutionCaches\_Game2d.419903443.00" t="ExcludeRecursive" />
   </component>
 </project>

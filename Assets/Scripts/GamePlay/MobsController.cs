@@ -119,6 +119,7 @@ public class MobsController : MonoBehaviour
         }
         else
         {
+            PlayerStat.Instance.CountKillsUp();
             this.gameObject.layer = 12;
             StateMob = StateMobs.Death;
             for (int i = 0; i < 6; ++i) Destroy(transform.GetChild(i).gameObject);
@@ -356,6 +357,7 @@ public class MobsController : MonoBehaviour
     {
         if (Random.Range(0, 30) == 1)
         {
+            PlayerStat.Instance.CountKritDamageUp();
             StatePosition();
             StateMobsGameObj.GetComponent<StateActive>().EndVoid(new List<bool> { true, true, true });
             StateMobsGameObj.GetComponent<StateActive>().Krit();
