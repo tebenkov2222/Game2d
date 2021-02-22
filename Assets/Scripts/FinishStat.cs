@@ -21,5 +21,7 @@ public class FinishStat : MonoBehaviour
         AddMoney = PlayerStat.Instance.CountKills * _addCountKills + PlayerStat.Instance.CountKritDamage * _addCountCritDamage +
                    PlayerStat.Instance.CountFireBallRepulsed * _addCountKillsFireBall;
         AddMOneyText.text = AddMoney.ToString();
+        int Coins = PlayerPrefs.GetInt("Coin");
+        PlayerPrefs.SetInt("Coin", Coins+AddMoney);
     }
 }

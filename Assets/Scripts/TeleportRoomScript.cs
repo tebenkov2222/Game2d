@@ -13,6 +13,7 @@ public class TeleportRoomScript : MonoBehaviour
     public string LevelName;
     public bool Levels = false;
     private int countMobs = 0;
+    
 
     private void Awake()
     {

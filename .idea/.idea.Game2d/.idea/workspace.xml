@@ -55,6 +55,9 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/PlayerStat.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/FinishStat.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/TeleportRoomScript.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Scenes/Parallax.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/TeleportRoomSettingsScript.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Scenes/MoveCamera.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1ny8C5UMOjNGe4pShmwNPnnPd35" />
@@ -63,8 +66,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34980392" />
-    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.30039215" />
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.349689" />
+    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="Discover.Launch.Via.Unity" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -77,20 +80,20 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
-    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2836">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="2836" />
       <option name="selectedOptions">
         <list />
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="11944">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="11944" />
       <option name="selectedOptions">
         <list />
       </option>
@@ -110,7 +113,9 @@
       <updated>1612350848983</updated>
       <workItem from="1612350929323" duration="24187000" />
       <workItem from="1612972829314" duration="1483000" />
-      <workItem from="1613294254019" duration="2763000" />
+      <workItem from="1613294254019" duration="3777000" />
+      <workItem from="1613644213532" duration="31000" />
+      <workItem from="1613994017700" duration="7994000" />
     </task>
     <servers />
   </component>
@@ -133,5 +138,24 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Scenes/Parallax.cs</url>
+          <line>28</line>
+          <properties documentPath="D:\Projects\GitHub\Game2d\Assets\Scripts\Scenes\Parallax.cs" initialLine="27" containingFunctionPresentation="method 'Update'">
+            <startOffsets>
+              <option value="1234" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1266" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

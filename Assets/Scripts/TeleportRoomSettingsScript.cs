@@ -6,8 +6,10 @@ public class TeleportRoomSettingsScript : MonoBehaviour
 {
     public static TeleportRoomSettingsScript Instance;
     public GameObject[] Rooms;
-    public GameObject Player, UI;
+    public Parallax[] Parallaxes;
+    public GameObject Player, UI, Wallpaper;
     private int ThisRoom = 0;
+    public Vector3 OffsetWallpaper;
     private void Awake()
     {
         if (Instance != null) Destroy(Instance.gameObject);
@@ -15,6 +17,7 @@ public class TeleportRoomSettingsScript : MonoBehaviour
         UI = GameObject.Find("Main Camera");
         Player = GameObject.Find("Player");
         Player.transform.position = GameObject.Find("Start").gameObject.transform.position;
+        Wallpaper.transform.position = GameObject.Find("Start").gameObject.transform.position + OffsetWallpaper;
     }
     public void NextRoom()
     {
@@ -30,6 +33,11 @@ public class TeleportRoomSettingsScript : MonoBehaviour
     void PlayerTeleportToRoom(GameObject Room)
     {
         UI. transform.position = new Vector2(GameObject.Find("Start").gameObject.transform.position.x, GameObject.Find("Start").gameObject.transform.position.y);
+        Wallpaper.transform.position = GameObject.Find("Start").gameObject.transform.position + OffsetWallpaper;
+        foreach (Parallax parallax in Parallaxes)
+        {
+            parallax.UpdateValues();
+        }
         Player.transform.position = GameObject.Find("Start").gameObject.transform.position;
         Player.GetComponent<SpriteRenderer>().enabled = true;
         Player.GetComponent<PlayerController>()._ActivePlayer = true;

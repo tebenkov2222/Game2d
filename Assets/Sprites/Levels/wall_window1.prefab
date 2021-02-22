@@ -117,7 +117,7 @@ MonoBehaviour:
   m_ShapeLightParametricSides: 14
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
-  m_ShapeLightFalloffSize: 2.2
+  m_ShapeLightFalloffSize: 8
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
   - {x: -0.6149626, y: -0.5383209, z: 0}

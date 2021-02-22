@@ -4,10 +4,11 @@ public class MoveCamera : MonoBehaviour
 {
     public GameObject _GOPlayer, _Camera;
     public float _deltaX = 2, _deltayUP = 10, _deltayDown = 10, t = 0.1f;
+    public float offsety;
     void Start()
     {
         _GOPlayer = GameObject.Find("Player");
-        _Camera.transform.position = new Vector3(_GOPlayer.transform.position.x, _GOPlayer.transform.position.y, -10);
+        _Camera.transform.position = new Vector3(_GOPlayer.transform.position.x, _GOPlayer.transform.position.y + offsety, -10);
     }
 
     // Update is called once per frame

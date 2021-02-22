@@ -52,6 +52,12 @@ TagManager:
   - name: NoLightDirection
     uniqueID: 3535401933
     locked: 0
+  - name: DirectionLight
+    uniqueID: 563484475
+    locked: 0
+  - name: Player
+    uniqueID: 2187250775
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
